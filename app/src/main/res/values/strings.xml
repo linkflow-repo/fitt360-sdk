@@ -1,0 +1,291 @@
+<resources>
+    <string name="app_name">FITT360SDK</string>
+    <string name="camera">Camera</string>
+
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="close">Close</string>
+    <string name="cancel">CANCEL</string>
+    <string name="delete">DELETE</string>
+    <string name="share">SHARE</string>
+    <string name="edit">EDIT</string>
+    <string name="select">SELECT</string>
+    <string name="back">Back</string>
+    <string name="download">Download</string>
+    <string name="download_start">Start download</string>
+    <string name="download_done">Completed download</string>
+    <string name="download_failed">Download failed</string>
+    <string name="downloading">Downloading</string>
+    <string name="uploading">Uploading</string>
+
+    <string name="download_alert_1">Please, try again after finished downloading already.</string>
+
+    <string name="update">Update</string>
+    <string name="version_state_latest">The latest version.</string>
+    <string name="version_state_recommend">Please update to the latest version\nwith bug fixes and new features.</string>
+    <string name="firmware_need_update">Please, update device with latest version</string>
+
+    <string name="device_info">Device info</string>
+
+    <string name="all">All</string>
+    <string name="select_all">Select all</string>
+    <string name="select_cancel_all">Cancel all</string>
+    <string name="select_cancel">Cancel select</string>
+    <string name="select_none">Please, select more than one.</string>
+
+    <string name="deleted_cnt_message">Contents deleted.</string>
+    <string name="delete_message">Do you want delete %d contents?</string>
+    <string name="delete_content">Do you want delete %s content?</string>
+    <string name="deleted">Deleted</string>
+    <string name="formatted">Formatted</string>
+    <string name="formatted_alert">Please, remove the external sdcard and insert it again.</string>
+    <string name="cannot_play_video">Can not play this file</string>
+    <string name="may_cannot_play_video">Video resolution is big\nMay not play video depends on mobile phone</string>
+    <string name="select_cnt">selected %d</string>
+
+    <string name="download_file_message">Do you want download the %s?</string>
+    <string name="hint_rtmp_stream_url">Write rtmp url.</string>
+
+    <string name="current">Current</string>
+
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connecting_with_cnt">Connecting ... %d</string>
+    <string name="connecting">Connecting ...</string>
+    <string name="connected">Connected</string>
+    <string name="connect_fine">Connect fine</string>
+    <string name="finding">Finding Device ... %d</string>
+
+    <string name="bluetooth">Bluetooth</string>
+    <string name="bt_connect_try_message">Connecting BT</string>
+    <string name="bt_discovery_start">Start discovery</string>
+    <string name="bt_connecting">Connecting BT</string>
+    <string name="bt_connected">Connected BT</string>
+    <string name="bt_disconnected">Disconnected BT</string>
+    <string name="bt_not_found">Please, check FITT360 is sleep mode.</string>
+    <string name="bt_pairing_request">After a while, a Bluetooth pairing request will appear.\nPlease make sure your device is in pairing mode.</string>
+    <string name="bt_pairing_request_cancel">Please change to pairing mode and try again.</string>
+
+    <string name="wifi_p2p">Wifi P2P</string>
+    <string name="wifi_p2p_connecting">Connecting P2P</string>
+    <string name="wifi_p2p_connected">Connected P2P</string>
+    <string name="wifi_p2p_disconnected">Disconnected P2P</string>
+    <string name="wifi_p2p_not_found">Please check FITT360 network is on.</string>
+    <string name="wifi_p2p_not_found_alert1">Turn off and on your mobile Wi-Fi.</string>
+    <string name="wifi_state_disabled">Please, check wifi state.</string>
+
+    <string name="location">Location</string>
+    <string name="location_disable">Please, turn on location service.</string>
+    <string name="location_disable_1">To connect FITT360, please turn on the location service(GPS).</string>
+
+    <string name="left_drawer_view_mode">View mode</string>
+    <string name="left_drawer_normal">Normal</string>
+    <string name="left_drawer_360">360</string>
+    <string name="left_drawer_cardboard">Card Board</string>
+    <string name="left_drawer_camera_mode">Camera mode</string>
+    <string name="left_drawer_camera_planet">Planet</string>
+
+    <string name="apply">Apply</string>
+
+    <string name="preview">Preview</string>
+    <string name="photo">Photo</string>
+    <string name="sns_live">Live</string>
+    <string name="video">Video</string>
+    <string name="record">Record</string>
+    <string name="recording">Recording</string>
+    <string name="live_view">Live view</string>
+    <string name="photo_shoot">Photo</string>
+
+    <string name="view_vr" translatable="false">VR</string>
+    <string name="view_360" translatable="false">360</string>
+    <string name="view_flat" translatable="false">Flat</string>
+    <string name="view_tiny_planet">Tiny Planet</string>
+    <string name="view_normal">Normal</string>
+
+    <string name="explain_1_title">Connect</string>
+    <string name="explain_1_subtitle">1.First, wireless LAN, Bluetooth, Check if the GPS function is turned on.</string>
+    <string name="explain_2_subtitle">2.Press the connect button on the product for about 2 seconds. When the button\'s LED blinks, you\'ll see Bluetooth and Wireless You are ready to connect.</string>
+    <string name="explain_3_title">Shoot</string>
+    <string name="explain_3_subtitle">After connecting with the smart phone,\nplease try to shoot.</string>
+
+    <string name="record_preview">Record &amp; Preview</string>
+    <string name="single">Single</string>
+    <string name="side">Side by side</string>
+    <string name="stitching">Stitching</string>
+    <string name="camera_mode">Capture mode</string>
+    <string name="camera_position">Camera position</string>
+    <string name="camera_position_1">LEFT</string>
+    <string name="camera_position_2">CENTER</string>
+    <string name="camera_position_3">RIGHT</string>
+    <string name="resolution">Resolution</string>
+    <string name="fps">Framerate</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="bitrate_low">Low quality</string>
+    <string name="bitrate_middle">Middle quality</string>
+    <string name="bitrate_high">High quality</string>
+    <string name="blend_low">Low quality</string>
+    <string name="blend_middle">Middle quality</string>
+    <string name="blend_high">High quality</string>
+    <string name="codec">Codec</string>
+    <string name="data_management">Data management</string>
+    <string name="format">Format</string>
+    <string name="iso">ISO</string>
+    <string name="delay">Capture delay (FITT360\'s physical button)</string>
+    <string name="delay_title">%.1f Sec</string>
+    <string name="second">Sec</string>
+    <string name="unit">""</string>
+
+    <string name="setting">Setting</string>
+    <string name="setting_2">SETTING</string>
+    <string name="gallery">Gallery</string>
+    <string name="device">Device</string>
+    <string name="phone">Phone</string>
+
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+
+    <string name="bt_list">Bluetooth List</string>
+    <string name="skip">Skip</string>
+
+    <string name="spec">Spec</string>
+    <string name="setting_camera">Setting camera</string>
+    <string name="setting_photo">Setting photo</string>
+    <string name="setting_record">Setting record</string>
+    <string name="setting_stitching">Setting stitching</string>
+    <string name="setting_distance">Setting distance</string>
+    <string name="setting_gps">Setting GPS</string>
+    <string name="setting_a2dp">Setting A2DP</string>
+    <string name="setting_language">Setting Language</string>
+    <string name="setting_language_type">Language</string>
+    <string name="center_mode">Center</string>
+    <string name="setting_a2dp_mode">A2DP</string>
+    <string name="setting_extra">Other settings</string>
+    <string name="setting_stitching_center_mode">Center Mode</string>
+    <string name="setting_stitching_blending">Blending</string>
+    <string name="setting_timelapse_state">Time lapse</string>
+    <string name="setting_timelapse_rate">Time lapse rate</string>
+    <string name="guide_use">How to use</string>
+
+    <string name="language_kr">Korean</string>
+    <string name="language_en">English</string>
+
+    <string name="setting_gps_belong">Send GPS info to device</string>
+    <string name="setting_gps_period">GPS sending period</string>
+
+    <string name="gps_alert"></string>
+
+    <string name="state">State</string>
+    <string name="check">Check</string>
+    <string name="terminate">Terminate</string>
+
+    <string name="permission_bluetooth">Bluetooth</string>
+    <string name="permission_write_read_storage">Storage</string>
+    <string name="permission_gps">GPS</string>
+    <string name="write_read_storage_dialog">This permission use to store for usually data. so accept this permission.</string>
+
+    <string name="bt_state_none">Could not find device.</string>
+    <string name="bt_state_near">Found device </string>
+    <string name="bt_state_finding">Finding device</string>
+
+    <string name="bt_state_finding_alert">Please, try to connect after finding.</string>
+    <string name="bt_state_finding_alert2">Device not found.</string>
+    <string name="bt_state_none_alert">This device could not find.</string>
+    <string name="bt_state_disabled">Please turn on Bluetooth.</string>
+
+    <string name="support_not_yet">This function will be apply to next version</string>
+    <string name="applied">Applied</string>
+    <string name="applied_fail">Failed apply</string>
+
+    <string name="percent">%d%%</string>
+    <string name="date">%d %d %d</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+
+    <string name="try_after_connected">Please, try again after connected.</string>
+    <string name="close_preview">Please, wait a moments to close preview.</string>
+    <string name="try_after_preview">Please, try again after appeared screen.</string>
+    <string name="preview_start_alert">Cannot use during recording.</string>
+    <string name="preview_change_set">Please, wait a moments to change preview.</string>
+    <string name="preview_ready">Loading Preview</string>
+    <string name="live_stream_alert_view_mode">Please, change to stitching mode and try again.</string>
+
+    <string name="temper_alert_first">The neckband temperature has risen.</string>
+    <string name="temper_alert_second">For your safety, we will exit the %s after 5 minutes.\nDo you want to continue?</string>
+    <string name="temper_alert_third">Exit the preview for your safety.\nPlease rest for a while</string>
+
+    <string name="select_alert_empty">Please select at least one.</string>
+
+    <string name="spec_processor">Processor</string>
+    <string name="spec_memory">Memory</string>
+    <string name="spec_storage">Storage</string>
+    <string name="spec_software">Software</string>
+    <string name="spec_battery">Battery</string>
+    <string name="spec_video">Video</string>
+    <string name="spec_photo">Photo</string>
+
+    <string name="alert_storage_external_full">External storage full</string>
+    <string name="alert_storage_internal_full">Internal storage full</string>
+    <string name="alert_storage_both_full">Internal and external storage full</string>
+    <string name="alert_record_safe">A two second delay is required for safe storage.</string>
+
+    <string name="format_internal">Delete all contents in internal storage</string>
+    <string name="format_external">Format external SDCard</string>
+
+    <string name="battery_level">Battery level is %d %%</string>
+    <string name="storage_level">Storage level is %d %%</string>
+    <string name="battery_low">Battery is low ( %d %% )</string>
+
+    <string name="storage_management">Storage Management</string>
+
+    <string name="other_app_alert">Real360 App is running.\n please, try again after close Real360 App.</string>
+
+    <string name="audio_disable">Muted</string>
+    <string name="audio_enable">Mute</string>
+
+    <string name="distance_near">Inside</string>
+    <string name="distance_far">Outdoor</string>
+
+    <string name="try_again_later">Please, try again later.</string>
+
+    <string name="license">Open source License</string>
+    <string name="fota_update">Update Firmware</string>
+    <string name="fota_download">Download Firmware</string>
+    <string name="fota_download_failed">Canceled firmware download</string>
+    <string name="fota_checking_update">Checking for update.</string>
+    <string name="fota_download_soon">Download will begin in a moment.</string>
+    <string name="fota_download_with_notify">You can see the download progress in the status window.</string>
+    <string name="fota_registered_not">Device not Registered.\n Please, try again later.</string>
+    <string name="fota_downloaded">Completed firmware downloaded.</string>
+    <string name="fota_uploaded">Completed firmware uploaded.</string>
+    <string name="fota_upload">Upload Firmware</string>
+    <string name="fota_current_latest">Current Version is latest.</string>
+    <string name="fota_need_download">Please, try it after download firmware update file.</string>
+    <string name="fota_need_time_more">Please, try again after 3 second.</string>
+    <string name="fota_downloading_already">Firmware downloading already.</string>
+    <string name="fota_step_is_not_finished">Registering on server.</string>
+    <string name="fota_data_agree">The file size is %d MB.\nDo you want to continue?</string>
+    <string name="fota_download_agree">There is the latest firmware.\nDo you want to download it?</string>
+    <string name="fota_update_ready">Preparing for Firmware update</string>
+    <string name="fota_updating">Firmware updating</string>
+    <string name="fota_upgrade_succeed">Upgrade succeed.\nRestart the device after a while.</string>
+    <string name="fota_upgrade_failed">Upgrade failed</string>
+    <string name="fota_upgrade_failed_as_disconnect">The device has been disconnected,\nbut the upgrade continues.</string>
+    <string name="fota_battery_low">If your device\'s battery is 30\% or higher, you can upgrade it.</string>
+    <string name="fota_download_alert_cancel">Please, do not go to home if you do it, download can be stop.</string>
+    <string name="fota_download_cancel_message">Do you want cancel to download?</string>
+    <string name="fota_download_alert_1">Firmware download is currently unavailable.(%d)</string>
+    <string name="etc">ETC</string>
+    <string name="debug_upload_test">Auto upload test at once</string>
+
+    <string name="network_has_problem">The network connection is unstable.\nPlease try again later.</string>
+    <string name="network_disable">No network is connected</string>
+
+    <string name="never_see_again">Never see again</string>
+
+    <string name="map">Map</string>
+
+    <string name="samsung_vr_connect_msg">Do you want watch this content with SAMSUNG VR app?</string>
+    <string name="reconnecting_cnt">Reconnecting %d ...</string>
+</resources>

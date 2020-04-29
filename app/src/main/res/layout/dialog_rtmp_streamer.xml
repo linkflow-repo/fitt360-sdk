@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/rtmp_url_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_rtmp_stream_url"
+        android:text="rtmp://15.164.211.126:1935/live/stream"/>
+    <CheckBox
+        android:id="@+id/auto_bitrate"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/rtmp_url_et"
+        android:text="Auto"
+        android:textColor="@color/black"
+        android:theme="@android:style/Theme.Holo"/>
+</RelativeLayout>

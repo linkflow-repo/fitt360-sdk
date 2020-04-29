@@ -1,0 +1,73 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.linkflow.fitt360sdk">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-feature android:name="android.hardware.usb.client" />
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/AppTheme" >
+        <activity android:name=".activity.MainActivity" android:launchMode="singleTask" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+        <activity android:name=".activity.setting.SettingPhotoActivity" />
+        <activity android:name=".activity.setting.SettingPhotoSelectActivity" />
+        <activity android:name=".activity.setting.SettingRecordActivity" />
+        <activity android:name=".activity.setting.SettingRecordSelectActivity" />
+        <activity android:name=".activity.setting.SettingA2DPActivity" />
+        <activity android:name=".activity.setting.SettingA2DPSelectActivity" />
+        <activity android:name=".activity.setting.SettingDeviceStorage" />
+        <activity android:name=".activity.setting.SettingGPSActivity" />
+        <activity android:name=".activity.setting.SettingLanguageActivity" />
+        <activity android:name=".activity.setting.SettingLanguageSelectActivity" />
+        <activity android:name=".activity.setting.SettingOthersActivity" />
+        <activity android:name=".activity.setting.SettingOthersSelectActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.BTListActivity" />
+        <activity android:name=".activity.SpecActivity" />
+        <activity android:name=".activity.GalleryActivity" />
+        <activity android:name=".activity.PreviewActivity" android:screenOrientation="landscape"/>
+
+        <service android:name=".service.RTMPStreamService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="linkflow.app.fitt360.rtmp_stream_start"/>
+                <action android:name="linkflow.app.fitt360.rtmp_stream_cancel"/>
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

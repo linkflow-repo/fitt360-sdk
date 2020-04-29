@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="orange">#ffbb00</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="red">#f00</color>
+    <color name="green">#ff4f8c0b</color>
+    <color name="green_trans">#664f8c0b</color>
+    <color name="darkslateblue">#483D8B</color>
+    <color name="blue">#ff1869af</color>
+    <color name="transparency">#00000000</color>
+    <color name="shadow">#1e000000</color>
+    <color name="grey">#ff5b5a5a</color>
+    <color name="light_gray">#ffebebeb</color>
+    <color name="deep_gray">#ff3b3b3b</color>
+    <color name="trans_gray">#8fcdcdcd</color>
+    <color name="float_transparent">#66000000</color>
+    <color name="sweet_dialog_bg_color">#FFFFFF</color>
+    <color name="change">#BEBEBF</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
+    <color name="blue_btn_bg_color">#AEDEF4</color>
+    <color name="blue_btn_bg_pressed_color">#96BFD2</color>
+    <color name="red_btn_bg_color">#DD6B55</color>
+    <color name="red_btn_bg_pressed_color">#CD5B55</color>
+    <color name="error_stroke_color">#F27474</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="trans_success_stroke_color">#33A5DC86</color>
+    <color name="warning_stroke_color">#F8BB86</color>
+    <color name="light_blue">#03A9F4</color>
+    <color name="light_gray_second">#999999</color>
+    <color name="gainsboro">#A9A9A9</color>
+
+    <color name="black_trans_cc">#cc292929</color>
+
+    <color name="default_panel">#aadbdd</color>
+    <color name="default_background">#e7e7e7</color>
+    <color name="default_text_color">#727272</color>
+    <color name="base_text_color">#4394D2</color>
+    <color name="gray_lighter_transparent">#88EEEDED</color>
+    <color name="gray_lighter">#EEEDED</color>
+    <color name="gray_light">#d7d7d7</color>
+    <color name="gray_transparent_light">#aad7d7d7</color>
+    <color name="gray_middle">#cab4b4b4</color>
+    <color name="black_light">#ff666666</color>
+    <color name="grape">#fda7a7</color>
+    <color name="blue_dark">#7795cd</color>
+    <color name="sky">#aadbdd</color>
+    <color name="sky_white">#cee8e9</color>
+    <color name="sky_dark">#77cacd</color>
+    <color name="sky_darker">#6eb8bb</color>
+    <color name="sky_transparent">#88aadbdd</color>
+    <color name="black_transparent">#88000000</color>
+    <color name="black_transparent_light">#55000000</color>
+    <color name="black_lighter">#f7f8f9</color>
+    <color name="grey_dark">#9ea4aa</color>
+    <color name="grey_light">#e8ebed</color>
+
+    <color name="grey_light_c9">#c9cdd2</color>
+
+    <color name="yellow">#fffffbae</color>
+    <color name="red_2">#f14950</color>
+    <color name="mint">#5ebfb8</color>
+    <color name="list_item_pressed">#1A000000</color>
+
+    <color name="drop_start">#5c000000</color>
+    <color name="drop_end">#00000000</color>
+    <color name="gray">#FF888888</color>
+    <color name="translateWhite">#55ffffff</color>
+    <color name="blue_trans">#247b8ea8</color>
+
+    <color name="black_under">#FF666666</color>
+    <color name="black_text">#FF4d4d4d</color>
+
+    <color name="leftDrawerBackColor">#161616</color>
+
+    <color name="base_dialog_btn_divider">#d2d2d2</color>
+    <color name="custom_dialog_btn">#eeeeee</color>
+    <color name="base_dialog_disagree">#161616</color>
+    <color name="base_dialog_agree">#f14950</color>
+
+    <color name="base_dialog_content_text">#161616</color>
+
+    <color name="red_transparent_light">#66f10800</color>
+    <color name="red_transparent">#aaf10800</color>
+
+    <array name="progress_bar">
+        <item>#77cacd</item>
+        <item>#fda7a7</item>
+        <item>#ff8dd304</item>
+    </array>
+</resources>
