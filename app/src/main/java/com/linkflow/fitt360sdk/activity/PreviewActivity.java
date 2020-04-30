@@ -46,6 +46,7 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == MSG_NOT_START_RTSP) {
+                    Log.d(TAG, "no started rtsp so do start after 6 sec");
                     mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isPreviewing());
                     mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
                 }
