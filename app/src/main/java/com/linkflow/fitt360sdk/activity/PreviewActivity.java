@@ -3,6 +3,7 @@ package com.linkflow.fitt360sdk.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,6 +21,7 @@ import app.library.linkflow.manager.neckband.NotifyManage;
 import app.library.linkflow.rtsp.RTSPStreamManager;
 
 public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callback {
+    private final String TAG = getClass().getSimpleName();
     private static final int MSG_NOT_START_RTSP = 10;
     private RTSPStreamManager mRTSPStreamManager;
 
@@ -38,13 +40,13 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
         mMuteBtn = findViewById(R.id.audio);
         mMuteBtn.setOnClickListener(this);
 
-        mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isRecording());
+        mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isPreviewing());
         mRTSPChecker = new Handler(getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == MSG_NOT_START_RTSP) {
-                    mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isRecording());
+                    mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isPreviewing());
                     mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
                 }
             }
@@ -62,7 +64,7 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
             if (mRTSPStreamManager != null) {
                 mRTSPStreamManager.stop();
             }
-        } else if (view.getId() == R.id.audio) {
+        }  else if (view.getId() == R.id.audio) {
             boolean isAudioDisabled = !mRTSPStreamManager.isAudioDisabled();
             mRTSPStreamManager.setAudioDisable(isAudioDisabled);
             mMuteBtn.setText(isAudioDisabled ? R.string.audio_disable : R.string.audio_enable);
@@ -75,18 +77,23 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
         if (mRTSPStreamManager != null) {
             mRTSPStreamManager.stop();
         }
+        mNeckbandManager.setPreviewState(false);
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(TAG, "surface created");
         mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
         mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
         RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
         mRTSPStreamManager = new RTSPStreamManager(recordSetItem.getWidth(), recordSetItem.getHeight(), new VideoDecoder.FrameCallback() {
             @Override
             public void hasFrame() {
-                mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
+                if (mRTSPChecker.hasMessages(MSG_NOT_START_RTSP)) {
+                    mNeckbandManager.setPreviewState(true);
+                    mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
+                }
             }
         }, null);
         mRTSPStreamManager.setUrl(NeckbandRestApiClient.getRTSPUrl());
@@ -96,12 +103,12 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+        Log.d(TAG, "surface changed");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        Log.d(TAG, "surface destroyed");
     }
 
     @Override
