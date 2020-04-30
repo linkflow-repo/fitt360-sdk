@@ -84,7 +84,7 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(TAG, "surface created");
+        Log.e(TAG, "surface created");
         mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
         mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
         RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
@@ -104,7 +104,7 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(TAG, "surface changed");
+        Log.e(TAG, "surface changed");
     }
 
     @Override

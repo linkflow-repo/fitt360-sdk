@@ -25,7 +25,9 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import app.library.linkflow.StoreDataHelper;
 import app.library.linkflow.manager.NeckbandRestApiClient;
+import app.library.linkflow.manager.StoredDataManager;
 import app.library.linkflow.manager.model.PreviewModel;
 import app.library.linkflow.manager.neckband.NeckbandManager;
 import app.library.linkflow.rtmp.RTSPToRTMPConverter;
@@ -34,7 +36,7 @@ import static app.library.linkflow.rtmp.RTSPToRTMPConverter.RTMP_STATUS.CONNECTE
 import static app.library.linkflow.rtmp.RTSPToRTMPConverter.RTMP_STATUS.RECONNECTING;
 
 public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Listener, TimerHelper.Listener {
-    private String TAG = this.getClass().getName();
+    private String TAG = this.getClass().getSimpleName();
     public static final String ACTION_START_RTMP_STREAM = "linkflow.app.fitt360.rtmp_stream_start";
     public static final String ACTION_CANCEL_RTMP_STREAM = "linkflow.app.fitt360.rtmp_stream_cancel";
     private static final int MSG_RTSP_CONFIGURE_CHANGED = 10, MSG_RTSP_CHECK_STARTED = 11, MSG_RTSP_CONNECT = 12, MSG_RTSP_RECONNECT = 13;
@@ -48,6 +50,7 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
     private RTSPToRTMPConverter.RTMP_STATUS currentStatus;
     private NeckbandManager mNeckbandManager;
     private NotificationHelper mNotifyManager;
+    private StoredDataManager mSDM = StoredDataManager.getInstance();
 
     private DecimalFormat mDecimalFormat = new DecimalFormat("0.#");
     private String mRTMPUrl;
@@ -59,7 +62,6 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
     private boolean pauseBitrateControl = false;
     private boolean isRTSPConnected = false;
 
-    private int bitrateValueAtStartTime;
     private long lastBitrateChangeExecutionTime = -1;
 
     @Override
@@ -157,8 +159,7 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
                     if (mRTMPUrl != null) {
                         if (mConverter.startRTMP(mRTMPUrl)) {
                             // backup original bitrate value and set temporary start bitrate to device
-                            bitrateValueAtStartTime = mNeckbandManager.getSetManage().getBitrate();
-
+                            mSDM.setData(this, "bitrateStartTime", mNeckbandManager.getSetManage().getBitrate());
                             if (mEnableBitrateAuto) {
                                 startAutoBitrateChanger();
                             }
@@ -204,7 +205,7 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
 
         // restore the device bitrate
         if (mNeckbandManager != null) {
-            mNeckbandManager.getSetManage().setBitrate(mNeckbandManager.getAccessToken(), bitrateValueAtStartTime);
+            mNeckbandManager.getSetManage().setBitrate(mNeckbandManager.getAccessToken(), (Integer) mSDM.getData(this, "bitrateStartTime", StoredDataManager.TYPE.TYPE_INT, 5));
         }
 
         mConverter.stop();

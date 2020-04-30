@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private MainRecyclerAdapter mAdapter;
 
     private long mStartedRecordTime;
+    private long mStreamingClickedTime;
     private RTMPStreamerDialog mRTMPStreamerDialog;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -171,18 +172,23 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     }
                     break;
                 case ID_STREAMING:
-                    if (!mRSToRMConverter.isRTMPWorking()) {
-                        mRTMPStreamerDialog.show(getSupportFragmentManager());
-                    } else {
-                        Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
-                        intent.setAction(RTMPStreamService.ACTION_CANCEL_RTMP_STREAM);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent);
+                    if (System.currentTimeMillis() - mStreamingClickedTime > 1500) {
+                        mStreamingClickedTime = System.currentTimeMillis();
+                        if (!mRSToRMConverter.isRTMPWorking()) {
+                            mRTMPStreamerDialog.show(getSupportFragmentManager());
                         } else {
-                            startService(intent);
+                            Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
+                            intent.setAction(RTMPStreamService.ACTION_CANCEL_RTMP_STREAM);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(intent);
+                            } else {
+                                startService(intent);
+                            }
+                            mRSToRMConverter.exit();
+                            mAdapter.changeStreamingState(false);
                         }
-                        mRSToRMConverter.exit();
-                        mAdapter.changeStreamingState(false);
+                    } else {
+                        Toast.makeText(this, "Please, try again later.", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
