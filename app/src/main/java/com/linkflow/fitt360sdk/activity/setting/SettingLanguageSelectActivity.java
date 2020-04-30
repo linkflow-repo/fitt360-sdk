@@ -92,7 +92,7 @@ public class SettingLanguageSelectActivity extends BaseActivity implements Setti
             switch (mSelectedIdPosition) {
                 case 0:
                     StoredDataManager.getInstance().setData(this, StoredDataManager.KEY_SELECTED_LANGUAGE, LANGUAGES[position]);
-                    mSetManage.getLanguageModel().setLanguage(mNeckbandManager.getAccessToken(), LANGUAGES[position]);
+                    mSetManage.getLanguageModel().setLanguage(mNeckbandManager.getAccessToken(), true, LANGUAGES[position]);
                     break;
             }
         }
