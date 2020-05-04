@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter {
     public enum ID {
-        ID_GALLERY, ID_RECORDING, ID_TAKE_PHOTO, ID_PREVIEW, ID_STREAMING, ID_SETTING
+        ID_GALLERY, ID_RECORDING, ID_TAKE_PHOTO, ID_PREVIEW, ID_STREAMING, ID_TEMPERATURE,  ID_SETTING
     }
 
-    public String[] mTitles = new String[] { "GALLERY", "START RECORDING", "TAKE A PHOTO", "PREVIEW", "START RTMP STREAMING", "SETTING" };
+    public String[] mTitles = new String[] { "GALLERY", "START RECORDING", "TAKE A PHOTO", "PREVIEW", "START RTMP STREAMING", "TEMPERATURE ENABLED", "SETTING" };
 
     private Context mContext;
     private ItemClickListener mListener;
@@ -60,6 +60,16 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void changeTemperatureState(boolean activated) {
+        int size = mItems.size();
+        for (int i = 0; i < size; i++) {
+            if (mItems.get(i).mId == ID.ID_TEMPERATURE) {
+                mItems.get(i).mTitle = (activated ? "TEMPERATURE ENABLED" : "TEMPERATURE DISABLED");
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
 
     public Item getItem(int position) {
         return mItems.get(position);

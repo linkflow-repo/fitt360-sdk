@@ -262,7 +262,6 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
                 Toast.makeText(this, R.string.wifi_p2p_connected, Toast.LENGTH_SHORT).show();
                 NeckbandRestApiClient.setBaseUrl(info.groupOwnerAddress.getHostAddress());
                 mNeckbandManager.connect("newwifi", "123456");
-                mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_DONE);
                 break;
             case STATE_DISCONNECTED:
                 Toast.makeText(this, R.string.wifi_p2p_disconnected, Toast.LENGTH_SHORT).show();

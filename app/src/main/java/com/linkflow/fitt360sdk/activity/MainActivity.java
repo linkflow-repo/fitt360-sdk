@@ -24,6 +24,8 @@ import com.linkflow.fitt360sdk.service.RTMPStreamService;
 import app.library.linkflow.ConnectManager;
 import app.library.linkflow.manager.model.PhotoModel;
 import app.library.linkflow.manager.model.RecordModel;
+import app.library.linkflow.manager.model.TemperModel;
+import app.library.linkflow.manager.neckband.ConnectStateManage;
 import app.library.linkflow.rtmp.RTSPToRTMPConverter;
 
 import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_GALLERY;
@@ -191,6 +193,12 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                         Toast.makeText(this, "Please, try again later.", Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case ID_TEMPERATURE:
+                    boolean enabled = !(mNeckbandManager.getSetManage().isNormalLimitEnable() || mNeckbandManager.getSetManage().isSafeLimitEnable());
+                    mNeckbandManager.getSetManage().getTemperModel().setTemperLimitEnable(mNeckbandManager.getAccessToken(), TemperModel.Type.NORMAL, enabled);
+                    mNeckbandManager.getSetManage().getTemperModel().setTemperLimitEnable(mNeckbandManager.getAccessToken(), TemperModel.Type.SAFE, enabled);
+                    mAdapter.changeTemperatureState(enabled);
+                    break;
             }
         } else {
             Toast.makeText(this, "please, check wifi direct.", Toast.LENGTH_SHORT).show();
@@ -206,5 +214,14 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     @Override
     public void completedTakePhoto(boolean success, String filename) {
 
+    }
+
+    @Override
+    public void onConnectState(ConnectStateManage.STATE state) {
+        super.onConnectState(state);
+        Log.e("main", "on connect state - " + state);
+        if (state == ConnectStateManage.STATE.STATE_DONE) {
+            mAdapter.changeTemperatureState(mNeckbandManager.getSetManage().isNormalLimitEnable() || mNeckbandManager.getSetManage().isSafeLimitEnable());
+        }
     }
 }
