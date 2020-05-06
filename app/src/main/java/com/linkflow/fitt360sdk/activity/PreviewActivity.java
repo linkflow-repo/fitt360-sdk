@@ -12,12 +12,15 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.mediacodec.AVPacket;
+import com.android.mediacodec.Packet;
 import com.android.mediacodec.VideoDecoder;
 import com.linkflow.fitt360sdk.R;
 
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.item.RecordSetItem;
 import app.library.linkflow.manager.neckband.NotifyManage;
+import app.library.linkflow.rtsp.AudioDecoderThread;
 import app.library.linkflow.rtsp.RTSPStreamManager;
 
 public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callback {
@@ -88,7 +91,22 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
         mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
         mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
         RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
-        mRTSPStreamManager = new RTSPStreamManager(recordSetItem.getWidth(), recordSetItem.getHeight(), new VideoDecoder.FrameCallback() {
+        mRTSPStreamManager = RTSPStreamManager.builder().setAsyncDataListener(new VideoDecoder.AsyncDataListener() {
+            @Override
+            public void asyncData(int type, Packet packet) {
+                // packet has all information about stream. you can use it.
+                if (type == AVPacket.PT_VIDEO) {
+
+                } else if (type == AVPacket.PT_AUDIO) {
+
+                }
+            }
+
+            @Override
+            public boolean disablePreview() {
+                return false;
+            }
+        }).setFrameCallback(new VideoDecoder.FrameCallback() {
             @Override
             public void hasFrame() {
                 if (mRTSPChecker.hasMessages(MSG_NOT_START_RTSP)) {
@@ -96,7 +114,12 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
                     mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
                 }
             }
-        }, null);
+        }).setAudioDecodedListener(new AudioDecoderThread.DecodedListener() {
+            @Override
+            public void decodedAudio(byte[] audioData, int offset, int length) {
+
+            }
+        }).setResolution(recordSetItem.getWidth(), recordSetItem.getHeight()).build();
         mRTSPStreamManager.setUrl(NeckbandRestApiClient.getRTSPUrl());
         mRTSPStreamManager.setSurface(holder.getSurface());
         mRTSPStreamManager.start();
