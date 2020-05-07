@@ -156,6 +156,7 @@
     <string name="setting_stitching">Setting stitching</string>
     <string name="setting_distance">Setting distance</string>
     <string name="setting_gps">Setting GPS</string>
+    <string name="setting_ap">Setting AP</string>
     <string name="setting_a2dp">Setting A2DP</string>
     <string name="setting_language">Setting Language</string>
     <string name="setting_language_type">Language</string>

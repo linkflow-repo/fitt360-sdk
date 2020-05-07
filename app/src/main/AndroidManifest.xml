@@ -56,6 +56,7 @@
         <activity android:name=".activity.setting.SettingLanguageSelectActivity" />
         <activity android:name=".activity.setting.SettingOthersActivity" />
         <activity android:name=".activity.setting.SettingOthersSelectActivity" />
+        <activity android:name=".activity.setting.SettingAPActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.BTListActivity" />
         <activity android:name=".activity.SpecActivity" />

@@ -18,10 +18,11 @@ import java.util.ArrayList;
 public class SettingRecyclerAdapter extends RecyclerView.Adapter {
     private static final int TYPE_BUTTON = 101, TYPE_PANEL = 102, TYPE_BUTTON_WITH_NOTIFY = 103;
     public enum ID {
-        ID_CONNECT, ID_SPEC, ID_MANAGEMENT_STORAGE, ID_LANGUAGE, ID_SETTING_PHOTO, ID_SETTING_RECORD, ID_SETTING_OTHERS,
-        ID_GPS_PHONE, ID_A2DP
+        ID_CONNECT, ID_SPEC, ID_MANAGEMENT_STORAGE, ID_SETTING_PHOTO, ID_SETTING_RECORD, ID_SETTING_OTHERS, ID_LANGUAGE,
+        ID_GPS_PHONE, ID_AP, ID_A2DP
     }
-    private int[] mTitles = new int[] { R.string.connect, R.string.spec, R.string.storage_management, R.string.setting_language, R.string.setting_photo, R.string.setting_record, R.string.setting_extra, R.string.setting_gps, R.string.setting_a2dp };
+    private int[] mTitles = new int[] { R.string.connect, R.string.spec, R.string.storage_management, R.string.setting_photo, R.string.setting_record,
+            R.string.setting_extra, R.string.setting_language, R.string.setting_gps, R.string.setting_ap, R.string.setting_a2dp};
     private int[] mIds = new int[] {};
     private ArrayList<SettingItem> mItems = new ArrayList<>();
     private Context mContext;
@@ -43,8 +44,8 @@ public class SettingRecyclerAdapter extends RecyclerView.Adapter {
             mItems.add(new SettingItem(ID.values()[i], TYPE_BUTTON, mTitles[i]));
         }
         mItems.add(1, new SettingItem(null, TYPE_PANEL, R.string.device_info));
-        mItems.add(6, new SettingItem(null, TYPE_PANEL, R.string.setting_camera));
-        mItems.add(9, new SettingItem(null, TYPE_PANEL, R.string.etc));
+        mItems.add(4, new SettingItem(null, TYPE_PANEL, R.string.setting_camera));
+        mItems.add(7, new SettingItem(null, TYPE_PANEL, R.string.etc));
         notifyDataSetChanged();
     }
 

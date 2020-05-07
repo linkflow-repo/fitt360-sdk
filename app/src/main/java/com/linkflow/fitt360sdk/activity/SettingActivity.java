@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.activity.setting.SettingA2DPActivity;
+import com.linkflow.fitt360sdk.activity.setting.SettingAPActivity;
 import com.linkflow.fitt360sdk.activity.setting.SettingDeviceStorage;
 import com.linkflow.fitt360sdk.activity.setting.SettingGPSActivity;
 import com.linkflow.fitt360sdk.activity.setting.SettingLanguageActivity;
@@ -77,6 +78,7 @@ public class SettingActivity extends BaseActivity implements SettingRecyclerAdap
             case ID_SETTING_OTHERS: selectedClass = SettingOthersActivity.class; break;
             case ID_GPS_PHONE: selectedClass = SettingGPSActivity.class; break;
             case ID_A2DP: selectedClass = SettingA2DPActivity.class; break;
+            case ID_AP: selectedClass = SettingAPActivity.class; break;
             default:
         }
         if (selectedClass != null) {
