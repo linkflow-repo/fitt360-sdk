@@ -17,7 +17,7 @@ import app.library.linkflow.manager.model.WifiAPModel;
 import app.library.linkflow.manager.neckband.SetManage;
 
 public class SettingAPActivity extends BaseActivity implements SetManage.Listener, WifiAPModel.Listener {
-    private EditText mAPSSIDEt, mAPPasswordEt, mAPGatewayIpEt, mAPPreferIpEt;
+    private EditText mAPSSIDEt, mAPPasswordEt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,8 +30,6 @@ public class SettingAPActivity extends BaseActivity implements SetManage.Listene
 
         mAPSSIDEt = findViewById(R.id.ssid_et);
         mAPPasswordEt = findViewById(R.id.password_et);
-        mAPGatewayIpEt = findViewById(R.id.gateway_et);
-        mAPPreferIpEt = findViewById(R.id.prefer_ip_et);
 
         mNeckbandManager.getSetManage().getWifiAPModel().setListener(this);
         mNeckbandManager.getSetManage().setListener(this);
@@ -51,25 +49,14 @@ public class SettingAPActivity extends BaseActivity implements SetManage.Listene
         if (item != null) {
             mAPSSIDEt.setText(item.mWifiSSID);
             mAPPasswordEt.setText(item.mPassword);
-            if (item.mGateway != null) {
-                mAPGatewayIpEt.setText(item.mGateway);
-            }
-            if (item.mPreferIp != null) {
-                mAPPreferIpEt.setText(item.mPreferIp);
-            }
         }
     }
 
     private void apply() {
         String ssid = mAPSSIDEt.getText().toString();
         String password = mAPPasswordEt.getText().toString();
-        String gateway = mAPGatewayIpEt.getText().toString();
-        String preferIp = mAPPreferIpEt.getText().toString();
         if (ssid.trim().length() > 2 && password.trim().length() > 2) {
             WifiAPItem item = new WifiAPItem(ssid, password);
-            if (gateway.trim().length() > 2 && preferIp.trim().length() > 2) {
-                item.setStaticMode(gateway, preferIp);
-            }
             mNeckbandManager.getSetManage().getWifiAPModel().setApInfo(mNeckbandManager.getAccessToken(), item);
         }
     }
@@ -96,7 +83,7 @@ public class SettingAPActivity extends BaseActivity implements SetManage.Listene
                 public void run() {
                     mNeckbandManager.getSetManage().getWifiAPModel().getStoredApInfo(mNeckbandManager.getAccessToken());
                 }
-            }, 5000);
+            }, 1000);
         }
     }
 }
