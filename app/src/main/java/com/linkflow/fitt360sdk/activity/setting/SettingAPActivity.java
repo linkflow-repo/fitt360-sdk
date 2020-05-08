@@ -83,7 +83,7 @@ public class SettingAPActivity extends BaseActivity implements SetManage.Listene
                 public void run() {
                     mNeckbandManager.getSetManage().getWifiAPModel().getStoredApInfo(mNeckbandManager.getAccessToken());
                 }
-            }, 1000);
+            }, 5000);
         }
     }
 }
