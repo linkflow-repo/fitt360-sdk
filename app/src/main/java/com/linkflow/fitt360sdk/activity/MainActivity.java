@@ -104,7 +104,6 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         Log.e("connect state", "called on resume - " + getClass().getName());
         if (mNeckbandManager.getConnectStateManage().isConnected()) {
             mRSToRMConverter = RTSPToRTMPConverter.getInstance();
-            mRSToRMConverter.getSentByteAmount2();
             if (mRSToRMConverter.isRTMPWorking()) {
 
             }
@@ -117,6 +116,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         if (mRSToRMConverter != null) {
             if (mRSToRMConverter.isRTMPWorking()) {
                 mRSToRMConverter.stop();
+                mRSToRMConverter.exit();
             }
         }
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);

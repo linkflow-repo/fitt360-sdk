@@ -67,7 +67,7 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
     @Override
     public void onCreate() {
         super.onCreate();
-        mNeckbandManager = NeckbandManager.getInstance();
+        mNeckbandManager = NeckbandManager.getInstance().init(getApplicationContext());
         mNotifyManager = NotificationHelper.getInstance().init(this);
         mTimerHelper = TimerHelper.getInstance().init(getMainLooper(), this);
         mPreviewModel = mNeckbandManager.getPreviewModel();
