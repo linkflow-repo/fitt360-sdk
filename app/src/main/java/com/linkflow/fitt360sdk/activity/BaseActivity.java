@@ -276,6 +276,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    @Override
+    public void enabledRndis(boolean b, String s) {
+
+    }
+
     public static class BatteryAndStorageChecker extends AsyncTask<Void, Integer, Void> {
         private static BatteryAndStorageChecker mInstance;
         private boolean mStop, mIsWorking;

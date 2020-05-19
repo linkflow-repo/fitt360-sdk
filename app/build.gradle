@@ -54,5 +54,5 @@ dependencies {
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     implementation 'com.github.pedroSG94.metadata-spherical-injector:metadataphoto:1.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    implementation files('libs/LinkflowSDK_beta_0.0.4.aar')
+    implementation files('libs/LinkflowSDK_beta_0.0.5.aar')
 }
