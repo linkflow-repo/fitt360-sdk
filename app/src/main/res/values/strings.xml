@@ -2,6 +2,7 @@
     <string name="app_name">FITT360SDK</string>
     <string name="camera">Camera</string>
 
+    <string name="go">Go</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="yes">Yes</string>
@@ -76,6 +77,8 @@
     <string name="wifi_p2p_not_found_alert1">Turn off and on your mobile Wi-Fi.</string>
     <string name="wifi_state_disabled">Please, check wifi state.</string>
 
+    <string name="usb_tethering">If you want to use USB tethering, you should enable USB tethering\nwill you go the page?</string>
+
     <string name="location">Location</string>
     <string name="location_disable">Please, turn on location service.</string>
     <string name="location_disable_1">To connect FITT360, please turn on the location service(GPS).</string>
@@ -136,6 +139,8 @@
     <string name="delay_title">%.1f Sec</string>
     <string name="second">Sec</string>
     <string name="unit">""</string>
+
+    <string name="auto_close_dialog">Please, wait during 10 seconds</string>
 
     <string name="setting">Setting</string>
     <string name="setting_2">SETTING</string>

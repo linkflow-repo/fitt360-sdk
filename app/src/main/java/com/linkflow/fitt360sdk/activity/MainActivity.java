@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter;
 import com.linkflow.fitt360sdk.dialog.RTMPStreamerDialog;
+import com.linkflow.fitt360sdk.dialog.USBTetheringDialog;
 import com.linkflow.fitt360sdk.service.RTMPStreamService;
 
 import app.library.linkflow.ConnectManager;
+import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.model.PhotoModel;
 import app.library.linkflow.manager.model.RecordModel;
 import app.library.linkflow.manager.model.TemperModel;
@@ -33,6 +35,7 @@ import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_SETTING;
 
 public class MainActivity extends BaseActivity implements MainRecyclerAdapter.ItemClickListener, PhotoModel.Listener {
     public static final String ACTION_START_RTMP = "start_rtmp", ACTION_STOP_RTMP = "stop_rtmp";
+    private static final String USB_STATE_CHANGE_ACTION = "android.hardware.usb.action.USB_STATE";
     private static final int PERMISSION_CALLBACK = 366;
 
     private RTSPToRTMPConverter mRSToRMConverter;
@@ -44,6 +47,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private long mStartedRecordTime;
     private long mStreamingClickedTime;
     private RTMPStreamerDialog mRTMPStreamerDialog;
+    private USBTetheringDialog mUSBTetheringDialog;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -56,6 +60,28 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     }
                 } else if (action.equals(ACTION_START_RTMP)) {
                     mAdapter.changeStreamingState(true);
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver mUsbBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equalsIgnoreCase(USB_STATE_CHANGE_ACTION)) {
+                    if(intent.getExtras().getBoolean("connected")) {
+                        if (isUSBTetheringActive()) {
+                            mNeckbandManager.enableRndis(true);
+                        } else {
+                            mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
+                            mUSBTetheringDialog.show(getSupportFragmentManager());
+                        }
+                    } else {
+                        mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
+                        mUSBTetheringDialog.dismissAllowingStateLoss();
+                    }
                 }
             }
         }
@@ -80,6 +106,19 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         mRTMPStreamerDialog = new RTMPStreamerDialog();
         mRTMPStreamerDialog.setClickListener(this);
 
+        mUSBTetheringDialog = new USBTetheringDialog();
+        mUSBTetheringDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.base_dialog_agree) {
+                    Intent tetherSettings = new Intent();
+                    tetherSettings.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+                    startActivity(tetherSettings);
+                }
+                mUSBTetheringDialog.dismissAllowingStateLoss();
+            }
+        });
+
         mRecordModel = mNeckbandManager.getRecordModel(this);
         mPhotoModel = mNeckbandManager.getPhotoModel(this);
 
@@ -93,6 +132,10 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         intentFilter.addAction(ACTION_START_RTMP);
         intentFilter.addAction(ACTION_STOP_RTMP);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, intentFilter);
+
+        IntentFilter usbFilter = new IntentFilter();
+        usbFilter.addAction(USB_STATE_CHANGE_ACTION);
+        registerReceiver(mUsbBroadcastReceiver , usbFilter);
 
         ConnectManager.getInstance(getApplicationContext()).disconnect();
 
@@ -108,6 +151,14 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
 
             }
         }
+        if (isUSBTetheringActive()) {
+            if (!mNeckbandManager.getConnectStateManage().isConnected()) {
+                mNeckbandManager.enableRndis(true);
+            }
+            mUSBTetheringDialog.dismissAllowingStateLoss();
+        } else if (!ConnectManager.getInstance(this).isConnected()) {
+            mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
+        }
     }
 
     @Override
@@ -119,6 +170,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                 mRSToRMConverter.exit();
             }
         }
+        unregisterReceiver(mUsbBroadcastReceiver);
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
     }
 
@@ -214,6 +266,19 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     @Override
     public void completedTakePhoto(boolean success, String filename) {
 
+    }
+
+    @Override
+    public void connectedRndis(String rndisIp) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "rndis connected", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Log.e("main", "connected rndis");
+        NeckbandRestApiClient.setBaseUrl(rndisIp);
+        mNeckbandManager.connect("newwifi", "123456");
     }
 
     @Override

@@ -19,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.dialog.TemperLimitAlertDialog;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+
 import app.library.linkflow.manager.item.StatusItem;
 import app.library.linkflow.manager.item.VolumeItem;
 import app.library.linkflow.manager.model.InfoModel;
@@ -192,7 +196,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void completedActionRecord(boolean success, boolean isRecording, String filename) {
-
+        if (success) {
+            mNeckbandManager.setRecordState(isRecording);
+        }
     }
 
     @Override
@@ -277,8 +283,27 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void enabledRndis(boolean b, String s) {
+    public void connectedRndis(String rndisIp) {
 
+    }
+
+    protected boolean isUSBTetheringActive(){
+        try{
+            for(Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();){
+                NetworkInterface intf=en.nextElement();
+                for(Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();){
+                    enumIpAddr.nextElement();
+                    if(!intf.isLoopback()){
+                        if(intf.getName().contains("rndis")){
+                            return true;
+                        }
+                    }
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static class BatteryAndStorageChecker extends AsyncTask<Void, Integer, Void> {
