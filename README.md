@@ -13,3 +13,5 @@ https://github.com/ashqal/MD360Player4Android
   - If you want set static ip, you should fill gateway ip address.
 2. USB Tethering ( RNDIS ) 
   - If FITT360 connected with SDK sample app as USB Tethering, RNDIS connect automatically within 10 second.
+  - USB Tethering can support RNDIS with available USIM chip. If smartphone and tablet doesn't have available USIM chip
+    , can not use FITT360 as USB Tethering. 
