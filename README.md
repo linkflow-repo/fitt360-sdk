@@ -15,3 +15,7 @@ https://github.com/ashqal/MD360Player4Android
   - If FITT360 connected with SDK sample app as USB Tethering, RNDIS connect automatically within 10 second.
   - USB Tethering's RNDIS requires an available USIM chip. If smartphone and tablet doesn't have available USIM chip
     , can not use FITT360 as USB Tethering. 
+    
+# New feature - 05/29/20
+1. enabled Stabilization
+  - you can enable or disable this function in preview page.
