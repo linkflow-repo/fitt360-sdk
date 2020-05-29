@@ -65,16 +65,20 @@ public class SettingAPActivity extends BaseActivity implements SetManage.Listene
     }
 
     private void apply() {
-        String ssid = mAPSSIDEt.getText().toString();
-        String password = mAPPasswordEt.getText().toString();
-        String gateway = mAPGatewayIpEt.getText().toString();
-        String preferIp = mAPPreferIpEt.getText().toString();
-        if (ssid.trim().length() > 2 && password.trim().length() > 2) {
-            WifiAPItem item = new WifiAPItem(ssid, password);
-            if (gateway.trim().length() > 2 && preferIp.trim().length() > 2) {
-                item.setStaticMode(gateway, preferIp);
+        if (mNeckbandManager.getConnectStateManage().isConnected()) {
+            String ssid = mAPSSIDEt.getText().toString();
+            String password = mAPPasswordEt.getText().toString();
+            String gateway = mAPGatewayIpEt.getText().toString();
+            String preferIp = mAPPreferIpEt.getText().toString();
+            if (ssid.trim().length() > 2 && password.trim().length() > 2) {
+                WifiAPItem item = new WifiAPItem(ssid, password);
+                if (gateway.trim().length() > 2 && preferIp.trim().length() > 2) {
+                    item.setStaticMode(gateway, preferIp);
+                }
+                mNeckbandManager.getSetManage().getWifiAPModel().setApInfo(mNeckbandManager.getAccessToken(), item);
             }
-            mNeckbandManager.getSetManage().getWifiAPModel().setApInfo(mNeckbandManager.getAccessToken(), item);
+        } else {
+            Toast.makeText(this, "please, check wifi direct.", Toast.LENGTH_SHORT).show();
         }
     }
 

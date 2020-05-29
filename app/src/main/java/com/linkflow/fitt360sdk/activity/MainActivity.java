@@ -171,7 +171,9 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
             }
         }
         unregisterReceiver(mUsbBroadcastReceiver);
-        mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
+        if (mNeckbandManager.getConnectStateManage().isConnected()) {
+            mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
+        }
     }
 
     @Override

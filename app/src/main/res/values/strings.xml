@@ -249,6 +249,8 @@
 
     <string name="audio_disable">Muted</string>
     <string name="audio_enable">Mute</string>
+    <string name="stable_on">Stable On</string>
+    <string name="stable_off">Stable Off</string>
 
     <string name="distance_near">Inside</string>
     <string name="distance_far">Outdoor</string>

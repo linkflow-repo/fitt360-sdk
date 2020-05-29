@@ -19,6 +19,7 @@ import com.linkflow.fitt360sdk.R;
 
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.item.RecordSetItem;
+import app.library.linkflow.manager.model.StitchingModel;
 import app.library.linkflow.manager.neckband.NotifyManage;
 import app.library.linkflow.rtsp.AudioDecoderThread;
 import app.library.linkflow.rtsp.RTSPStreamManager;
@@ -29,7 +30,8 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
     private RTSPStreamManager mRTSPStreamManager;
 
     private Handler mRTSPChecker;
-    private Button mMuteBtn;
+    private Button mMuteBtn, mStableBtn;
+    private boolean mIsStable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +44,12 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
 
         mMuteBtn = findViewById(R.id.audio);
         mMuteBtn.setOnClickListener(this);
+
+        mStableBtn = findViewById(R.id.stable);
+        mStableBtn.setOnClickListener(this);
+        mIsStable = mNeckbandManager.getSetManage().enabledStabilization();
+
+        mStableBtn.setText(mIsStable ? R.string.stable_on : R.string.stable_off);
 
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isPreviewing());
         mRTSPChecker = new Handler(getMainLooper()) {
@@ -72,6 +80,8 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
             boolean isAudioDisabled = !mRTSPStreamManager.isAudioDisabled();
             mRTSPStreamManager.setAudioDisable(isAudioDisabled);
             mMuteBtn.setText(isAudioDisabled ? R.string.audio_disable : R.string.audio_enable);
+        } else if (view.getId() == R.id.stable) {
+            setStable(mIsStable);
         }
     }
 
@@ -83,6 +93,23 @@ public class PreviewActivity extends BaseActivity implements SurfaceHolder.Callb
         }
         mNeckbandManager.setPreviewState(false);
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
+    }
+
+    private void setStable(boolean enable) {
+        mNeckbandManager.getSetManage().getStitchingModel().setStabilizationState(mNeckbandManager.getAccessToken(), !enable, new StitchingModel.StabilizationListener() {
+            @Override
+            public void completedGetStabilizationState(boolean success, boolean enabled) {
+
+            }
+
+            @Override
+            public void completedSetStabilizationState(boolean success) {
+                if (success) {
+                    mIsStable = !mIsStable;
+                    mStableBtn.setText(mIsStable ? R.string.stable_on : R.string.stable_off);
+                }
+            }
+        });
     }
 
     @Override
