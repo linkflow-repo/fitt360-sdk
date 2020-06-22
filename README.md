@@ -19,3 +19,10 @@ https://github.com/ashqal/MD360Player4Android
 # New feature - 05/29/20
 1. enabled Stabilization
   - you can enable or disable this function in preview page.
+
+# New feature = 06/22/20
+1. enabled Stitching filter
+  - you can check this feature in Setting -> Other settings
+  - first, click Stitching Fitler Enable and make on.
+  - click Stitching Filter Type and input 4096 ( 4096 : seperate mode )
+  - Stitching Filter dual scale H and V can change horizontal, vertical scale size. ( 1.0 is full size )
