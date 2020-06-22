@@ -20,7 +20,7 @@ https://github.com/ashqal/MD360Player4Android
 1. enabled Stabilization
   - you can enable or disable this function in preview page.
 
-# New feature = 06/22/20
+# New feature - 06/22/20
 1. enabled Stitching filter
   - you can check this feature in Setting -> Other settings
   - first, click Stitching Fitler Enable and make on.
