@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.activity.BaseActivity;
 import com.linkflow.fitt360sdk.adapter.SettingSelectRecyclerAdapter;
+import com.linkflow.fitt360sdk.item.Item;
 import com.linkflow.fitt360sdk.item.RadioItem;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class SettingLanguageSelectActivity extends BaseActivity implements Setti
         finish();
     }
 
-    private ArrayList<RadioItem> initItems() {
+    private ArrayList<Item> initItems() {
         switch (mSelectedIdPosition) {
             case 0: return makeItems(findPosition(mSelectedLanguage, LANGUAGES), LANGUAGES_R);
         }
@@ -107,9 +108,9 @@ public class SettingLanguageSelectActivity extends BaseActivity implements Setti
         return 0;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, int[] list) {
+    protected ArrayList<Item> makeItems(int selectedPosition, int[] list) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(getString(list[i]), i == selectedPosition));
         }

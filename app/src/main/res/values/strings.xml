@@ -2,7 +2,6 @@
     <string name="app_name">FITT360SDK</string>
     <string name="camera">Camera</string>
 
-    <string name="go">Go</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="yes">Yes</string>
@@ -59,6 +58,13 @@
     <string name="connect_fine">Connect fine</string>
     <string name="finding">Finding Device ... %d</string>
 
+    <string name="audio_disable">Muted</string>
+    <string name="audio_enable">Mute</string>
+    <string name="stable_on">Stable On</string>
+    <string name="stable_off">Stable Off</string>
+
+    <string name="usb_tethering">If you want to use USB tethering, you should enable USB tethering\nwill you go the page?</string>
+
     <string name="bluetooth">Bluetooth</string>
     <string name="bt_connect_try_message">Connecting BT</string>
     <string name="bt_discovery_start">Start discovery</string>
@@ -76,8 +82,6 @@
     <string name="wifi_p2p_not_found">Please check FITT360 network is on.</string>
     <string name="wifi_p2p_not_found_alert1">Turn off and on your mobile Wi-Fi.</string>
     <string name="wifi_state_disabled">Please, check wifi state.</string>
-
-    <string name="usb_tethering">If you want to use USB tethering, you should enable USB tethering\nwill you go the page?</string>
 
     <string name="location">Location</string>
     <string name="location_disable">Please, turn on location service.</string>
@@ -161,8 +165,8 @@
     <string name="setting_stitching">Setting stitching</string>
     <string name="setting_distance">Setting distance</string>
     <string name="setting_gps">Setting GPS</string>
-    <string name="setting_ap">Setting AP</string>
     <string name="setting_a2dp">Setting A2DP</string>
+    <string name="setting_ap">Setting AP</string>
     <string name="setting_language">Setting Language</string>
     <string name="setting_language_type">Language</string>
     <string name="center_mode">Center</string>
@@ -170,6 +174,20 @@
     <string name="setting_extra">Other settings</string>
     <string name="setting_stitching_center_mode">Center Mode</string>
     <string name="setting_stitching_blending">Blending</string>
+    <string name="setting_stitching_trim_upper">Stitching Trim Upper</string>
+    <string name="setting_stitching_trim_lower">Stitching Trim Lower</string>
+    <string name="setting_stitching_filter_enable">Stitching Filter Enable</string>
+    <string name="setting_stitching_filter_type">Stitching Filter Type</string>
+    <string name="setting_stitching_color_brightness">Stitching Color Brightness</string>
+    <string name="setting_stitching_color_contrast">Stitching Color Contrast</string>
+    <string name="setting_stitching_color_saturation">Stitching Color Saturation</string>
+    <string name="setting_stitching_filter_dual_scale_h">Stitching Filter dual scale H</string>
+    <string name="setting_stitching_filter_dual_scale_v">Stitching Filter dual scale V</string>
+    <string name="setting_stitching_filter_dual_offset_h">Stitching Filter dual offset H</string>
+    <string name="setting_stitching_filter_dual_offset_v">Stitching Filter dual offset V</string>
+    <string name="setting_stitching_revolution_enable">Stitching Revolution Enable</string>
+    <string name="setting_stitching_revolution_speed">Stitching Revolution Speed</string>
+    <string name="setting_stabilization_cal_reset">Stabilization Cal Reset</string>
     <string name="setting_timelapse_state">Time lapse</string>
     <string name="setting_timelapse_rate">Time lapse rate</string>
     <string name="guide_use">How to use</string>
@@ -203,6 +221,8 @@
     <string name="support_not_yet">This function will be apply to next version</string>
     <string name="applied">Applied</string>
     <string name="applied_fail">Failed apply</string>
+
+    <string name="go">Go</string>
 
     <string name="percent">%d%%</string>
     <string name="date">%d %d %d</string>
@@ -246,11 +266,6 @@
     <string name="storage_management">Storage Management</string>
 
     <string name="other_app_alert">Real360 App is running.\n please, try again after close Real360 App.</string>
-
-    <string name="audio_disable">Muted</string>
-    <string name="audio_enable">Mute</string>
-    <string name="stable_on">Stable On</string>
-    <string name="stable_off">Stable Off</string>
 
     <string name="distance_near">Inside</string>
     <string name="distance_far">Outdoor</string>

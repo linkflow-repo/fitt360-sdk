@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.activity.BaseActivity;
 import com.linkflow.fitt360sdk.adapter.SettingSelectRecyclerAdapter;
+import com.linkflow.fitt360sdk.item.ButtonItem;
+import com.linkflow.fitt360sdk.item.InputItem;
+import com.linkflow.fitt360sdk.item.Item;
 import com.linkflow.fitt360sdk.item.RadioItem;
 
 import java.util.ArrayList;
@@ -87,43 +90,59 @@ public abstract class SettingBaseSelectActivity extends BaseActivity implements 
         return 0;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, String[] list) {
+    protected ArrayList<Item> makeItems(int selectedPosition, String[] list) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(list[i], i == selectedPosition));
         }
         return items;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, int[] list) {
+    protected ArrayList<Item> makeItems(int selectedPosition, int[] list) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(getString(list[i]), i == selectedPosition));
         }
         return items;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, float[] list, int[] values, int resource) {
+    protected ArrayList<Item> makeItems(int selectedPosition, float[] list, int[] values, int resource) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(getString(resource, list[i]), values[i], i == selectedPosition));
         }
         return items;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, int[] list, int[] values) {
+    protected ArrayList<Item> makeItems(int selectedPosition, int[] list, int[] values) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(getString(list[i]), values[i], i == selectedPosition));
         }
         return items;
     }
 
-    protected ArrayList<RadioItem> initItems() {
+    protected ArrayList<Item> makeInputItems(String[] values) {
+        ArrayList<Item> items = new ArrayList<>();
+        for (String value : values) {
+            items.add(new InputItem(value));
+        }
+        return items;
+    }
+
+    protected ArrayList<Item> makeButtonItems(String[] values) {
+        ArrayList<Item> items = new ArrayList<>();
+        for (String value : values) {
+            items.add(new ButtonItem(value));
+        }
+        return items;
+    }
+
+    protected ArrayList<Item> initItems() {
         return null;
     }
 

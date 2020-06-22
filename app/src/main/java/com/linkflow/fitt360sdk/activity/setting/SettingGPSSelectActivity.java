@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.activity.BaseActivity;
 import com.linkflow.fitt360sdk.adapter.SettingSelectRecyclerAdapter;
+import com.linkflow.fitt360sdk.item.Item;
 import com.linkflow.fitt360sdk.item.RadioItem;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class SettingGPSSelectActivity extends BaseActivity implements SettingSel
         mSelectedIdPosition = intent.getIntExtra("selected_id_position", 0);
     }
 
-    private ArrayList<RadioItem> initItems() {
+    private ArrayList<Item> initItems() {
         switch (mSelectedIdPosition) {
             case 1: return makeItems(findPosition(mSetManage.getGPSPeriod() / 1000, PERIOD), PERIOD);
         }
@@ -81,7 +82,7 @@ public class SettingGPSSelectActivity extends BaseActivity implements SettingSel
     @Override
     public void selectedItem(int position) {
         if (mAdapter.updateAdapter(position)) {
-            RadioItem item = mAdapter.getItem(position);
+            RadioItem item = mAdapter.getItemAsRadio(position);
             switch (mSelectedIdPosition) {
                 case 1:
                     int value = Integer.parseInt(item.mTitle.replaceAll(getString(R.string.second), ""));
@@ -100,9 +101,9 @@ public class SettingGPSSelectActivity extends BaseActivity implements SettingSel
         return 0;
     }
 
-    protected ArrayList<RadioItem> makeItems(int selectedPosition, int[] list) {
+    protected ArrayList<Item> makeItems(int selectedPosition, int[] list) {
         mAdapter.setSelectedPosition(selectedPosition);
-        ArrayList<RadioItem> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < list.length; i++) {
             items.add(new RadioItem(list[i] + getString(R.string.second), i == selectedPosition));
         }

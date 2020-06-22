@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.linkflow.fitt360sdk.R;
+import com.linkflow.fitt360sdk.item.Item;
 import com.linkflow.fitt360sdk.item.RadioItem;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class SettingPhotoSelectActivity extends SettingBaseSelectActivity {
     }
 
     @Override
-    protected ArrayList<RadioItem> initItems() {
+    protected ArrayList<Item> initItems() {
         PhotoSetItem photoSetItem = mNeckbandManager.getSetManage().getPhotoSetItem();
         PhotoExtendSetItem photoExtendSetItem = mNeckbandManager.getSetManage().getPhotoExtendSetItem();
         switch (mSelectedIdPosition) {
@@ -59,7 +60,7 @@ public class SettingPhotoSelectActivity extends SettingBaseSelectActivity {
             return;
         }
         if (mAdapter.updateAdapter(position)) {
-            RadioItem item = mAdapter.getItem(position);
+            RadioItem item = mAdapter.getItemAsRadio(position);
             switch (mSelectedIdPosition) {
                 case 0:
                     if (!mSetManage.getPhotoSetItem().mViewMode.equals(item.mTitle)) {
@@ -99,7 +100,7 @@ public class SettingPhotoSelectActivity extends SettingBaseSelectActivity {
         }
     }
 
-    private ArrayList<RadioItem> makeResolutions(String currentValue) {
+    private ArrayList<Item> makeResolutions(String currentValue) {
         switch (mSetManage.getPhotoSetItem().mViewMode) {
             case "stitching": return makeItems(findPosition(currentValue, STITCHING_RESOLUTION), STITCHING_RESOLUTION);
             case "sidebyside": return makeItems(findPosition(currentValue, SIDE_BY_SIDE_RESOLUTION), SIDE_BY_SIDE_RESOLUTION);

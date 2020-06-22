@@ -6,10 +6,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.linkflow.fitt360sdk.R;
-import com.linkflow.fitt360sdk.item.RadioItem;
+import com.linkflow.fitt360sdk.item.Item;
 
 import java.util.ArrayList;
-
 
 public class SettingA2DPSelectActivity extends SettingBaseSelectActivity {
 
@@ -22,7 +21,7 @@ public class SettingA2DPSelectActivity extends SettingBaseSelectActivity {
     }
 
     @Override
-    protected ArrayList<RadioItem> initItems() {
+    protected ArrayList<Item> initItems() {
         boolean a2dpModeEnable = mNeckbandManager.getSetManage().isActivateA2DPMode();
         switch (mSelectedIdPosition) {
             case 0: return makeItems(a2dpModeEnable ? 1 : 0, new String[] { getString(R.string.off), getString(R.string.on) });
