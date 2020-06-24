@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private long mStreamingClickedTime;
     private RTMPStreamerDialog mRTMPStreamerDialog;
     private USBTetheringDialog mUSBTetheringDialog;
+    private boolean mRTMPStreamMute;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -246,6 +247,11 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     } else {
                         Toast.makeText(this, "Please, try again later.", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case ID_STREAMING_MUTE:
+                    mRTMPStreamMute = !mRTMPStreamMute;
+                    mRSToRMConverter.setMute(mRTMPStreamMute);
+                    mAdapter.changeStreamingMute(mRTMPStreamMute);
                     break;
                 case ID_TEMPERATURE:
                     boolean enabled = !(mNeckbandManager.getSetManage().isNormalLimitEnable() || mNeckbandManager.getSetManage().isSafeLimitEnable());

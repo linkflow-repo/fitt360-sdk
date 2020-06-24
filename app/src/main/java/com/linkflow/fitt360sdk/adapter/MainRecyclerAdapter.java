@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter {
     public enum ID {
-        ID_GALLERY, ID_RECORDING, ID_TAKE_PHOTO, ID_PREVIEW, ID_STREAMING, ID_TEMPERATURE,  ID_SETTING
+        ID_GALLERY, ID_RECORDING, ID_TAKE_PHOTO, ID_PREVIEW, ID_STREAMING, ID_STREAMING_MUTE, ID_TEMPERATURE,  ID_SETTING
     }
 
-    public String[] mTitles = new String[] { "GALLERY", "START RECORDING", "TAKE A PHOTO", "PREVIEW", "START RTMP STREAMING", "TEMPERATURE ENABLED", "SETTING" };
+    public String[] mTitles = new String[] { "GALLERY", "START RECORDING", "TAKE A PHOTO", "PREVIEW", "START RTMP STREAMING", "MUTE RTMP STREAMING", "TEMPERATURE ENABLED", "SETTING" };
 
     private Context mContext;
     private ItemClickListener mListener;
@@ -54,6 +54,17 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter {
         for (int i = 0; i < size; i++) {
             if (mItems.get(i).mId == ID.ID_STREAMING) {
                 mItems.get(i).mTitle = (activated ? "STOP RTMP STREAMING" : "START RTMP STREAMING");
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+    public void changeStreamingMute(boolean activated) {
+        int size = mItems.size();
+        for (int i = 0; i < size; i++) {
+            if (mItems.get(i).mId == ID.ID_STREAMING_MUTE) {
+                mItems.get(i).mTitle = (activated ? "MUTED RTMP STREAMING" : "MUTE RTMP STREAMING");
                 notifyDataSetChanged();
                 break;
             }
