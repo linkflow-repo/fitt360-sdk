@@ -284,7 +284,6 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                 Toast.makeText(MainActivity.this, "rndis connected", Toast.LENGTH_SHORT).show();
             }
         });
-        Log.e("main", "connected rndis");
         NeckbandRestApiClient.setBaseUrl(rndisIp);
         mNeckbandManager.connect("newwifi", "123456");
     }
