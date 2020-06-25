@@ -26,3 +26,10 @@ https://github.com/ashqal/MD360Player4Android
   - first, click Stitching Fitler Enable and make on.
   - click Stitching Filter Type and input 4096 ( 4096 : seperate mode )
   - Stitching Filter dual scale H and V can change horizontal, vertical scale size. ( 1.0 is full size )
+  
+# New feature - 06/25/20
+1. enabled RTMP Streaming mute function
+  - you can make mute or unmute as realtime.
+  *If you muted and started playing RTMP and started playing with VLC, you can't unmute it. 
+  However, if you stop VLC playback and run it again, you will hear a sound.
+
