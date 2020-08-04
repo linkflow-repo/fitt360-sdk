@@ -5,12 +5,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +27,7 @@ import com.linkflow.fitt360sdk.service.RTMPStreamService;
 
 import app.library.linkflow.ConnectManager;
 import app.library.linkflow.manager.NeckbandRestApiClient;
+import app.library.linkflow.manager.helper.LocationHelper;
 import app.library.linkflow.manager.model.PhotoModel;
 import app.library.linkflow.manager.model.RecordModel;
 import app.library.linkflow.manager.model.TemperModel;
@@ -33,7 +37,8 @@ import app.library.linkflow.rtmp.RTSPToRTMPConverter;
 import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_GALLERY;
 import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_SETTING;
 
-public class MainActivity extends BaseActivity implements MainRecyclerAdapter.ItemClickListener, PhotoModel.Listener {
+public class MainActivity extends BaseActivity implements MainRecyclerAdapter.ItemClickListener, PhotoModel.Listener,
+        LocationHelper.LocationChangeListener {
     public static final String ACTION_START_RTMP = "start_rtmp", ACTION_STOP_RTMP = "stop_rtmp";
     private static final String USB_STATE_CHANGE_ACTION = "android.hardware.usb.action.USB_STATE";
     private static final int PERMISSION_CALLBACK = 366;
@@ -41,6 +46,8 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private RTSPToRTMPConverter mRSToRMConverter;
     private RecordModel mRecordModel;
     private PhotoModel mPhotoModel;
+    private LocationHelper mLocationHelper;
+    private Handler mDelayHandler = new Handler();
 
     private MainRecyclerAdapter mAdapter;
 
@@ -49,6 +56,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private RTMPStreamerDialog mRTMPStreamerDialog;
     private USBTetheringDialog mUSBTetheringDialog;
     private boolean mRTMPStreamMute;
+    private boolean mIsTakePicture;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -106,6 +114,19 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         mRSToRMConverter = RTSPToRTMPConverter.getInstance();
         mRTMPStreamerDialog = new RTMPStreamerDialog();
         mRTMPStreamerDialog.setClickListener(this);
+
+        // you can use location helper in SDK, but it can not support all cases so if this helper does not helpful, you should make your own code.
+        mLocationHelper = new LocationHelper(this, new LocationHelper.LocationApplyListener() {
+            @Override
+            public void locationState(int state) {
+                switch (state) {
+                    case LocationHelper.LOCATION_STATE_ON: break;
+                    case LocationHelper.LOCATION_STATE_OFF: break;
+                    case LocationHelper.LOCATION_STATE_PERMISSION: break;
+                    case LocationHelper.LOCATION_STATE_ERROR: break;
+                }
+            }
+        });
 
         mUSBTetheringDialog = new USBTetheringDialog();
         mUSBTetheringDialog.setClickListener(new View.OnClickListener() {
@@ -213,13 +234,22 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     if (System.currentTimeMillis() - mStartedRecordTime >= 2000) {
                         mStartedRecordTime = System.currentTimeMillis();
                         boolean isRecording = !mNeckbandManager.isRecording();
+                        if (isRecording) {
+                            mLocationHelper.trackingLocation(1000, this);
+                        } else {
+                            mLocationHelper.stopTracking();
+                        }
                         mRecordModel.actionRecord(mNeckbandManager.getAccessToken(), isRecording);
                         mAdapter.changeRecordState(isRecording);
                     } else {
                         Toast.makeText(this, R.string.alert_record_safe, Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case ID_TAKE_PHOTO: mPhotoModel.takePhoto(mNeckbandManager.getAccessToken()); break;
+                case ID_TAKE_PHOTO:
+                    mIsTakePicture = true;
+                    mLocationHelper.trackingLocation(1000, this);
+                    mPhotoModel.takePhoto(mNeckbandManager.getAccessToken());
+                    break;
                 case ID_PREVIEW:
                     if (!mNeckbandManager.isRecording()) {
                         Intent intent = new Intent(this, PreviewActivity.class);
@@ -273,7 +303,21 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
 
     @Override
     public void completedTakePhoto(boolean success, String filename) {
-
+        mDelayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mIsTakePicture = false;
+                mLocationHelper.trackingLocation(3000, MainActivity.this);
+            }
+        }, 500);
+        if (mNeckbandManager.isRecording()) {
+            mDelayHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLocationHelper.trackingLocation(mNeckbandManager.getSetManage().getGPSPeriod(), MainActivity.this);
+                }
+            }, 500);
+        }
     }
 
     @Override
@@ -294,6 +338,15 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         Log.e("main", "on connect state - " + state);
         if (state == ConnectStateManage.STATE.STATE_DONE) {
             mAdapter.changeTemperatureState(mNeckbandManager.getSetManage().isNormalLimitEnable() || mNeckbandManager.getSetManage().isSafeLimitEnable());
+        }
+    }
+
+    @Override
+    public void changedLocation(Location location) {
+        // if can not find current location, location will be last known location or null.
+        if(location != null && (mIsTakePicture || mNeckbandManager.isRecording())) {
+            Log.e("main", "send location - " + location.getLatitude() + " / " + location.getLongitude());
+            mNeckbandManager.getSetManage().getGPSModel().setLocation(mNeckbandManager.getAccessToken(), location.getLatitude(), location.getLongitude());
         }
     }
 }
