@@ -51,6 +51,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'com.github.ashqal:MD360Player4Android:2.5.0'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     implementation 'com.github.pedroSG94.metadata-spherical-injector:metadataphoto:1.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
