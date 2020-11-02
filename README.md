@@ -32,4 +32,9 @@ https://github.com/ashqal/MD360Player4Android
   - you can make mute or unmute as realtime.
   - If you muted and started playing RTMP and started playing with VLC, you can't unmute it. 
   However, if you stop VLC playback and run it again, you will hear a sound.
-
+  
+# Fixed - 11/02/20
+1. rndis cannot works when usb connect and disconnect immediately
+2. bluetooth helper module support mulitiple listener
+3. removed, request bluetooth pairing during bluetooth discovery after bonded none 
+    - it unnessary step, because FITT360 device does not pairing mode. 
