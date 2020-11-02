@@ -66,7 +66,7 @@ public abstract class AutoCloseDialog extends DialogFragment {
         }
     }
 
-    private void close() {
+    public void close() {
         if (mHandlerThread != null) {
             mHandlerThread.quit();
             mHandlerThread = null;

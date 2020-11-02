@@ -32,8 +32,7 @@ import app.library.linkflow.connect.WifiConnectHelper;
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.neckband.ConnectStateManage;
 
-public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener,
-        BTConnectHelper.Listener, ConnectManager.Listener {
+public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener, ConnectManager.Listener {
     public static final int CALLED_BY_START_ACTIVITY = 1001, CALLED_BY_SETTING_ACTIVITY = 1002;
     private static final int MSG_P2P_STATE_DISABLED = 10;
     public static final String KEY_CALLED_BY = "calledBy";
@@ -80,6 +79,7 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
 
         mConnectHelper = ConnectHelper.getInstance().init(this);
         mBTConnectHelper = mConnectHelper.getBTConnectHelper();
+        mBTConnectHelper.addListener(mBTListener);
         mWifiConnectHelper = mConnectHelper.getWifiConnectHelper();
 
         mRefreshLayout = findViewById(R.id.refresh);
@@ -97,7 +97,7 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(mAdapter);
 
-        mAdapter.addItems(mBTConnectHelper.getBondedBTList());
+        mAdapter.addItems(mBTConnectHelper.getBondedBTDeviceList());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
     protected void onResume() {
         super.onResume();
         mBTConnectHelper.registerReceiver(getApplicationContext());
-        mBTConnectHelper.startDiscovery(-1, true, this);
+        mBTConnectHelper.startDiscovery(-1, true);
     }
 
     @Override
@@ -133,6 +133,7 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
             mBeforeClickedItemPosition = position;
             mProgressBar.setVisibility(View.GONE);
             mBTConnectHelper.disconnect();
+            mBTConnectHelper.addListener(mBTListener);
             mWifiConnectHelper.disconnect(true, -1,null);
             mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
 
@@ -150,58 +151,15 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
     }
 
     @Override
-    public void bluetoothState(boolean isOff) {
-
-    }
-
-    @Override
-    public void foundBTDevice(BluetoothDevice device, boolean isCorrectDevice, boolean isBonded) {
-        mAdapter.addItem(device);
-        if (isCorrectDevice && isBonded) {
-            int correctDevicePosition = mAdapter.getCorrectDevicePosition(device.getAddress());
-            if (correctDevicePosition != -1) {
-                mBeforeClickedItemPosition = correctDevicePosition;
-                mAdapter.checked(-1, correctDevicePosition);
-            }
-        }
-    }
-
-    @Override
-    public void changedBondedState(BluetoothDevice device, int state) {
-        Log.e("btListActivity", "changed bonded state");
-        if (state == BluetoothDevice.BOND_BONDED) {
-            mAdapter.changedBonded(device.getAddress());
-            mConnector.start(null, mSelectedBTDevice);
-        } else if (state == BluetoothDevice.BOND_NONE) {
-            Toast.makeText(this, R.string.bt_pairing_request_cancel, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void discoveryFinished(boolean foundDevice, boolean isBonded) {
-        mProgressBar.setVisibility(View.GONE);
-        if (!mCanceledBTDiscovery) {
-            mAdapter.changeItemsStateNone();
-        }
-        mCanceledBTDiscovery = false;
-    }
-
-    @Override
-    public void discoveryTryCnt(int tryCnt, int maxTryCnt, boolean foundTargetDevice) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mAdapter.changeItemStateFinding();
-    }
-
-    @Override
     public void onRefresh() {
         mBeforeClickedItemPosition = -1;
         mRefreshLayout.setRefreshing(false);
         mAdapter.clear();
-        mAdapter.addItems(mBTConnectHelper.getBondedBTList());
+        mAdapter.addItems(mBTConnectHelper.getBondedBTDeviceList());
 
         mCanceledBTDiscovery = mBTConnectHelper.isDiscovering();
 
-        mBTConnectHelper.startDiscovery(-1,true,this);
+        mBTConnectHelper.startDiscovery(-1,true);
     }
 
     public BroadcastReceiver mConnectReceiver = new BroadcastReceiver() {
@@ -217,12 +175,60 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
         }
     };
 
+    private BTConnectHelper.Listener mBTListener = new BTConnectHelper.Listener() {
+        @Override
+        public void bluetoothState(boolean isOff) {
+            if (!mNeckbandManager.getConnectStateManage().isPassBluetooth() && isOff) {
+                Toast.makeText(BTListActivity.this, R.string.bt_status_off, Toast.LENGTH_SHORT).show();
+            } else {
+                mBTConnectHelper.startDiscovery(-1, true);
+            }
+        }
+
+        @Override
+        public void foundBTDevice(BluetoothDevice device, boolean isCorrectDevice, int bondState) {
+            mAdapter.addItem(device);
+            if (isCorrectDevice && bondState == BluetoothDevice.BOND_BONDED) {
+                int correctDevicePosition = mAdapter.getCorrectDevicePosition(device.getAddress());
+                if (correctDevicePosition != -1) {
+                    mBeforeClickedItemPosition = correctDevicePosition;
+                    mAdapter.checked(-1, correctDevicePosition);
+                }
+            }
+        }
+
+        @Override
+        public void changedBondedState(BluetoothDevice device, int state) {
+            if (state == BluetoothDevice.BOND_BONDED) {
+                mAdapter.changedBonded(device.getAddress());
+                mAdapter.notifyDataSetChanged();
+                mNeckbandManager.setConnectBTDevice(device);
+                mConnector.start(null, mSelectedBTDevice);
+                Log.e("btListActivity", "changed bonded state - " + device.getName() + " / " + state);
+            } else if (state == BluetoothDevice.BOND_NONE) {
+                Toast.makeText(BTListActivity.this, R.string.bt_pairing_request_cancel, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void discoveryFinished(BluetoothDevice device, boolean foundDevice, boolean isBonded) {
+            mProgressBar.setVisibility(View.GONE);
+            if (!mCanceledBTDiscovery) {
+                mAdapter.changeItemsStateNone();
+            }
+            mCanceledBTDiscovery = false;
+        }
+
+        @Override
+        public void discoveryTryCnt(int tryCnt, int maxTryCnt, boolean foundTargetDevice) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mAdapter.changeItemStateFinding();
+        }
+    };
+
     @Override
-    public void bluetoothState(ConnectManager.STATE state, ConnectManager.PARING paring) {
+    public void bluetoothState(BluetoothDevice device, ConnectManager.STATE state, ConnectManager.PARING paring) {
         switch (paring) {
-            case REQUEST:
-                Toast.makeText(this, R.string.bt_pairing_request, Toast.LENGTH_SHORT).show();
-                break;
             case CANCELED:
                 Toast.makeText(this, R.string.bt_pairing_request_cancel, Toast.LENGTH_LONG).show();
                 break;

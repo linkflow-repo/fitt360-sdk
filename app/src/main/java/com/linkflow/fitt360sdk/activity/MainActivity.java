@@ -5,15 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,8 +23,8 @@ import com.linkflow.fitt360sdk.dialog.USBTetheringDialog;
 import com.linkflow.fitt360sdk.service.RTMPStreamService;
 
 import app.library.linkflow.ConnectManager;
+import app.library.linkflow.connect.ConnectHelper;
 import app.library.linkflow.manager.NeckbandRestApiClient;
-import app.library.linkflow.manager.helper.LocationHelper;
 import app.library.linkflow.manager.model.PhotoModel;
 import app.library.linkflow.manager.model.RecordModel;
 import app.library.linkflow.manager.model.TemperModel;
@@ -37,8 +34,7 @@ import app.library.linkflow.rtmp.RTSPToRTMPConverter;
 import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_GALLERY;
 import static com.linkflow.fitt360sdk.adapter.MainRecyclerAdapter.ID.ID_SETTING;
 
-public class MainActivity extends BaseActivity implements MainRecyclerAdapter.ItemClickListener, PhotoModel.Listener,
-        LocationHelper.LocationChangeListener {
+public class MainActivity extends BaseActivity implements MainRecyclerAdapter.ItemClickListener, PhotoModel.Listener {
     public static final String ACTION_START_RTMP = "start_rtmp", ACTION_STOP_RTMP = "stop_rtmp";
     private static final String USB_STATE_CHANGE_ACTION = "android.hardware.usb.action.USB_STATE";
     private static final int PERMISSION_CALLBACK = 366;
@@ -46,19 +42,15 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     private RTSPToRTMPConverter mRSToRMConverter;
     private RecordModel mRecordModel;
     private PhotoModel mPhotoModel;
-    private LocationHelper mLocationHelper;
-    private Handler mDelayHandler = new Handler();
 
     private MainRecyclerAdapter mAdapter;
 
-    private long mStartedRecordTime;
-    private long mStreamingClickedTime;
+    private long mStartedRecordTime, mReceivedUsbStateChangedTime;
     private RTMPStreamerDialog mRTMPStreamerDialog;
     private USBTetheringDialog mUSBTetheringDialog;
     private boolean mRTMPStreamMute;
-    private boolean mIsTakePicture;
 
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mRTMPBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -82,13 +74,13 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                 if (action.equalsIgnoreCase(USB_STATE_CHANGE_ACTION)) {
                     if(intent.getExtras().getBoolean("connected")) {
                         if (isUSBTetheringActive()) {
+                            Log.e("main", "usb state change action - usb tethering activated");
                             mNeckbandManager.enableRndis(true);
                         } else {
                             mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
                             mUSBTetheringDialog.show(getSupportFragmentManager());
                         }
                     } else {
-                        mNeckbandManager.getConnectStateManage().setState(ConnectStateManage.STATE.STATE_NONE);
                         mUSBTetheringDialog.dismissAllowingStateLoss();
                     }
                 }
@@ -113,17 +105,24 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
 
         mRSToRMConverter = RTSPToRTMPConverter.getInstance();
         mRTMPStreamerDialog = new RTMPStreamerDialog();
-        mRTMPStreamerDialog.setClickListener(this);
-
-        // you can use location helper in SDK, but it can not support all cases so if this helper does not helpful, you should make your own code.
-        mLocationHelper = new LocationHelper(this, new LocationHelper.LocationApplyListener() {
+        mRTMPStreamerDialog.setClickListener(new View.OnClickListener() {
             @Override
-            public void locationState(int state) {
-                switch (state) {
-                    case LocationHelper.LOCATION_STATE_ON: break;
-                    case LocationHelper.LOCATION_STATE_OFF: break;
-                    case LocationHelper.LOCATION_STATE_PERMISSION: break;
-                    case LocationHelper.LOCATION_STATE_ERROR: break;
+            public void onClick(View v) {
+                if (v.getId() == R.id.base_dialog_agree) {
+                    if (!mRSToRMConverter.isRTMPWorking()) {
+                        Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
+                        intent.setAction(RTMPStreamService.ACTION_START_RTMP_STREAM);
+                        intent.putExtra("rtmp_url", "rtmp://15.164.211.126:1935/live/test");
+                        intent.putExtra("rtmp_bitrate_auto", mRTMPStreamerDialog.enableAutoBitrate());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
+                    }
+                    mRTMPStreamerDialog.dismissAllowingStateLoss();
+                } else if (v.getId() == R.id.base_dialog_disagree) {
+                    mRTMPStreamerDialog.dismissAllowingStateLoss();
                 }
             }
         });
@@ -150,23 +149,22 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
         recycler.setLayoutManager(manager);
         recycler.setAdapter(mAdapter);
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_START_RTMP);
-        intentFilter.addAction(ACTION_STOP_RTMP);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, intentFilter);
+        IntentFilter rtmpFilter = new IntentFilter();
+        rtmpFilter.addAction(ACTION_START_RTMP);
+        rtmpFilter.addAction(ACTION_STOP_RTMP);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRTMPBroadcastReceiver, rtmpFilter);
 
         IntentFilter usbFilter = new IntentFilter();
         usbFilter.addAction(USB_STATE_CHANGE_ACTION);
         registerReceiver(mUsbBroadcastReceiver , usbFilter);
 
         ConnectManager.getInstance(getApplicationContext()).disconnect();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("connect state", "called on resume - " + getClass().getName());
+        Log.e("connect state", "called on resume - usb tethering : " + isUSBTetheringActive());
         if (mNeckbandManager.getConnectStateManage().isConnected()) {
             mRSToRMConverter = RTSPToRTMPConverter.getInstance();
             if (mRSToRMConverter.isRTMPWorking()) {
@@ -186,37 +184,15 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRSToRMConverter != null) {
-            if (mRSToRMConverter.isRTMPWorking()) {
-                mRSToRMConverter.stop();
-                mRSToRMConverter.exit();
-            }
+        if (mRSToRMConverter.isRTMPWorking()) {
+            mRSToRMConverter.stop();
+            mRSToRMConverter.exit();
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRTMPBroadcastReceiver);
         unregisterReceiver(mUsbBroadcastReceiver);
-        if (mNeckbandManager.getConnectStateManage().isConnected()) {
-            mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
-        if (view.getId() == R.id.base_dialog_agree) {
-            if (!mRSToRMConverter.isRTMPWorking()) {
-                Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
-                intent.setAction(RTMPStreamService.ACTION_START_RTMP_STREAM);
-                intent.putExtra("rtmp_url", mRTMPStreamerDialog.getRTMPUrl());
-                intent.putExtra("rtmp_bitrate_auto", mRTMPStreamerDialog.enableAutoBitrate());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
-            }
-            mRTMPStreamerDialog.dismissAllowingStateLoss();
-        } else if (view.getId() == R.id.base_dialog_disagree) {
-            mRTMPStreamerDialog.dismissAllowingStateLoss();
-        }
+        ConnectHelper.getInstance().disconnect();
+        ConnectHelper.getInstance().clearRegister(getApplicationContext());
+        mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), false);
     }
 
     @Override
@@ -234,22 +210,13 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     if (System.currentTimeMillis() - mStartedRecordTime >= 2000) {
                         mStartedRecordTime = System.currentTimeMillis();
                         boolean isRecording = !mNeckbandManager.isRecording();
-                        if (isRecording) {
-                            mLocationHelper.trackingLocation(1000, this);
-                        } else {
-                            mLocationHelper.stopTracking();
-                        }
                         mRecordModel.actionRecord(mNeckbandManager.getAccessToken(), isRecording);
                         mAdapter.changeRecordState(isRecording);
                     } else {
                         Toast.makeText(this, R.string.alert_record_safe, Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case ID_TAKE_PHOTO:
-                    mIsTakePicture = true;
-                    mLocationHelper.trackingLocation(1000, this);
-                    mPhotoModel.takePhoto(mNeckbandManager.getAccessToken());
-                    break;
+                case ID_TAKE_PHOTO: mPhotoModel.takePhoto(mNeckbandManager.getAccessToken()); break;
                 case ID_PREVIEW:
                     if (!mNeckbandManager.isRecording()) {
                         Intent intent = new Intent(this, PreviewActivity.class);
@@ -259,23 +226,18 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     }
                     break;
                 case ID_STREAMING:
-                    if (System.currentTimeMillis() - mStreamingClickedTime > 1500) {
-                        mStreamingClickedTime = System.currentTimeMillis();
-                        if (!mRSToRMConverter.isRTMPWorking()) {
-                            mRTMPStreamerDialog.show(getSupportFragmentManager());
-                        } else {
-                            Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
-                            intent.setAction(RTMPStreamService.ACTION_CANCEL_RTMP_STREAM);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                startForegroundService(intent);
-                            } else {
-                                startService(intent);
-                            }
-                            mRSToRMConverter.exit();
-                            mAdapter.changeStreamingState(false);
-                        }
+                    if (!mRSToRMConverter.isRTMPWorking()) {
+                        mRTMPStreamerDialog.show(getSupportFragmentManager());
                     } else {
-                        Toast.makeText(this, "Please, try again later.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
+                        intent.setAction(RTMPStreamService.ACTION_CANCEL_RTMP_STREAM);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
+                        mRSToRMConverter.exit();
+                        mAdapter.changeStreamingState(false);
                     }
                     break;
                 case ID_STREAMING_MUTE:
@@ -299,37 +261,12 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     public void completedGetRecordState(boolean success, boolean isRecording) {
         super.completedGetRecordState(success, isRecording);
         mAdapter.changeRecordState(isRecording);
+
     }
 
     @Override
     public void completedTakePhoto(boolean success, String filename) {
-        mDelayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mIsTakePicture = false;
-                mLocationHelper.trackingLocation(3000, MainActivity.this);
-            }
-        }, 500);
-        if (mNeckbandManager.isRecording()) {
-            mDelayHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mLocationHelper.trackingLocation(mNeckbandManager.getSetManage().getGPSPeriod(), MainActivity.this);
-                }
-            }, 500);
-        }
-    }
 
-    @Override
-    public void connectedRndis(String rndisIp) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, "rndis connected", Toast.LENGTH_SHORT).show();
-            }
-        });
-        NeckbandRestApiClient.setBaseUrl(rndisIp);
-        mNeckbandManager.connect("newwifi", "123456");
     }
 
     @Override
@@ -342,11 +279,20 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
     }
 
     @Override
-    public void changedLocation(Location location) {
-        // if can not find current location, location will be last known location or null.
-        if(location != null && (mIsTakePicture || mNeckbandManager.isRecording())) {
-            Log.e("main", "send location - " + location.getLatitude() + " / " + location.getLongitude());
-            mNeckbandManager.getSetManage().getGPSModel().setLocation(mNeckbandManager.getAccessToken(), location.getLatitude(), location.getLongitude());
-        }
+    public void recordState(boolean isPhysical, boolean isRecording) {
+        mAdapter.changeRecordState(isRecording);
+    }
+
+    @Override
+    public void connectedRndis(String rndisIp) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "rndis connected", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Log.e("main", "connected rndis");
+        NeckbandRestApiClient.setBaseUrl(rndisIp);
+        mNeckbandManager.connect("newwifi", "123456");
     }
 }

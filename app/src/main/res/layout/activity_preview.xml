@@ -11,7 +11,7 @@
         android:id="@+id/audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/audio_enable" />
+        android:text="@string/audio_enable"/>
     <Button
         android:id="@+id/stable"
         android:layout_width="wrap_content"

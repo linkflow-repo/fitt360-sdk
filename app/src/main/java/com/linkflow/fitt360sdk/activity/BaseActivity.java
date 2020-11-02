@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -202,8 +201,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void recordState(boolean isRecording) {
+    public void recordState(boolean isPhysical, boolean isRecording) {
         mNeckbandManager.setRecordState(isRecording);
+    }
+
+    @Override
+    public void completedGetTimestamp(boolean success, long timestamp) {
+
     }
 
     @Override

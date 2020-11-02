@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.linkflow.fitt360sdk.R;
 import com.linkflow.fitt360sdk.adapter.GalleryRecyclerAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import app.library.linkflow.Constant;
@@ -106,6 +107,10 @@ public class GalleryActivity extends BaseActivity implements GalleryRecyclerAdap
     }
 
     private void downloadMedia(final GalleryItem item, final boolean hasMap, final double[] firstLocation) {
+        File file = new File(Constant.RECORD_SAVE_PATH);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         mMediaModel.download(mNeckbandManager.getAccessToken(), item, new DownloadHelper.DownloadListener() {
             @Override
             public void beginDownload() {

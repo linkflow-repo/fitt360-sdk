@@ -311,4 +311,6 @@
 
     <string name="samsung_vr_connect_msg">Do you want watch this content with SAMSUNG VR app?</string>
     <string name="reconnecting_cnt">Reconnecting %d ...</string>
+
+    <string name="bt_status_off">Please, check bluetooth enabled</string>
 </resources>

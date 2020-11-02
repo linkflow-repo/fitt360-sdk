@@ -2,7 +2,6 @@ package com.linkflow.fitt360sdk.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -88,10 +87,5 @@ public class SettingActivity extends BaseActivity implements SettingRecyclerAdap
             }
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void recordState(boolean isRecording) {
-        super.recordState(isRecording);
     }
 }
