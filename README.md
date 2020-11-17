@@ -38,3 +38,7 @@ https://github.com/ashqal/MD360Player4Android
 2. bluetooth helper module support mulitiple listener
 3. removed, request bluetooth pairing during bluetooth discovery after bonded none 
     - it unnessary step, because FITT360 device does not pairing mode. 
+    
+# Fixed - 11/17/20
+1. bluetooth connect - sometimes bluetooth re-connect after connected wifi direct
+2. supported bluetooth connect by device's address without discovery ( but the deivce have to be paired )
