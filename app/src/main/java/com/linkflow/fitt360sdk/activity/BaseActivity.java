@@ -270,6 +270,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    @Override
+    public void disconnected() {
+
+    }
+
     private String getWorkingState() {
         String workingState = "";
         if (mNeckbandManager.isPreviewing()) {
