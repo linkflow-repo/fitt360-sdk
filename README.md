@@ -42,3 +42,7 @@ https://github.com/ashqal/MD360Player4Android
 # Fixed - 11/17/20
 1. bluetooth connect - sometimes bluetooth re-connect after connected wifi direct
 2. supported bluetooth connect by device's address without discovery ( but the deivce have to be paired )
+
+# Fixed = 11/23/20
+1. sometimes app crashed by null point exception
+2. sometimes rndis does not connect 
