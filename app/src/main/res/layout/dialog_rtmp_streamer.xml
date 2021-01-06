@@ -6,8 +6,7 @@
         android:id="@+id/rtmp_url_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_rtmp_stream_url"
-        android:text="rtmp://15.164.211.126:1935/live/stream"/>
+        android:hint="@string/hint_rtmp_stream_url" />
     <CheckBox
         android:id="@+id/auto_bitrate"
         android:layout_width="80dp"

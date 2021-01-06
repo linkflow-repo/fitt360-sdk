@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity implements MainRecyclerAdapter.It
                     if (!mRSToRMConverter.isRTMPWorking()) {
                         Intent intent = new Intent(MainActivity.this, RTMPStreamService.class);
                         intent.setAction(RTMPStreamService.ACTION_START_RTMP_STREAM);
-                        intent.putExtra("rtmp_url", "rtmp://15.164.211.126:1935/live/test");
+                        intent.putExtra("rtmp_url", mRTMPStreamerDialog.getRTMPUrl());
                         intent.putExtra("rtmp_bitrate_auto", mRTMPStreamerDialog.enableAutoBitrate());
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(intent);
