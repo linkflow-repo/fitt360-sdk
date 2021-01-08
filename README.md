@@ -46,3 +46,6 @@ https://github.com/ashqal/MD360Player4Android
 # Fixed - 11/23/20
 1. sometimes app crashed by null point exception
 2. sometimes rndis does not connect 
+
+# Fixed - 01/08/21
+1. bluetooth bonded checker has problem so it can make not show pairing dialog sometimes 
