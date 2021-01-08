@@ -188,7 +188,7 @@ public class BTListActivity extends BaseActivity implements BTDeviceRecyclerAdap
         @Override
         public void foundBTDevice(BluetoothDevice device, boolean isCorrectDevice, int bondState) {
             mAdapter.addItem(device);
-            if (isCorrectDevice && bondState == BluetoothDevice.BOND_BONDED) {
+            if (isCorrectDevice && mBTConnectHelper.isBondedDevice(device)) {
                 int correctDevicePosition = mAdapter.getCorrectDevicePosition(device.getAddress());
                 if (correctDevicePosition != -1) {
                     mBeforeClickedItemPosition = correctDevicePosition;
