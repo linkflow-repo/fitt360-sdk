@@ -6,6 +6,7 @@ http://54.180.46.204/api/android/index.html
 android 360 viewer library
 https://github.com/ashqal/MD360Player4Android
 
+* if you want use this over android 11, rndis will not work because rndis's ip change every time. and it fixed by latest firmware but not released so if you have to use rndis, please wait to release latest firmware.
 
 # New feature ( belong to Firmware 1.7.1 )
 1. connect WIFI AP 
