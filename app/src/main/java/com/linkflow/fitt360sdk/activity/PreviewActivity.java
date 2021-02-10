@@ -1,9 +1,5 @@
 package com.linkflow.fitt360sdk.activity;
 
-import android.graphics.SurfaceTexture;
-import android.media.MediaCodec;
-import android.media.MediaFormat;
-import android.opengl.EGL14;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +7,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,19 +17,14 @@ import com.android.mediacodec.AVPacket;
 import com.android.mediacodec.Packet;
 import com.android.mediacodec.VideoDecoder;
 import com.asha.vrlib.MDVRLibrary;
-import com.asha.vrlib.texture.MD360VideoTexture;
 import com.linkflow.fitt360sdk.R;
 
-import java.nio.ByteBuffer;
-
-import app.library.linkflow.Constant;
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.item.RecordSetItem;
 import app.library.linkflow.manager.model.StitchingModel;
 import app.library.linkflow.manager.neckband.NotifyManage;
 import app.library.linkflow.rtsp.AudioDecoderThread;
 import app.library.linkflow.rtsp.RTSPStreamManager;
-import app.library.linkflow.rtsp.VideoDecodeThread;
 
 public class PreviewActivity extends BaseActivity {
     private final String TAG = getClass().getSimpleName();
