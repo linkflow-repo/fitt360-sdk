@@ -50,3 +50,6 @@ https://github.com/ashqal/MD360Player4Android
 
 # Fixed - 01/08/21
 1. bluetooth bonded checker has problem so it can make not show pairing dialog sometimes 
+
+# Fixed - 02/10/21
+1. removed unnessary code in sdk
