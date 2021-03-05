@@ -53,3 +53,7 @@ https://github.com/ashqal/MD360Player4Android
 
 # Fixed - 02/10/21
 1. removed unnessary code in sdk
+
+
+# Changed - 03/05/21
+1. rtspStreamerManager can start without surface -> will not start media codec ( video, audio )
