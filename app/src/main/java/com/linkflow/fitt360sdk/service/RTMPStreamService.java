@@ -28,6 +28,7 @@ import java.util.TimerTask;
 import app.library.linkflow.StoreDataHelper;
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.StoredDataManager;
+import app.library.linkflow.manager.item.RecordSetItem;
 import app.library.linkflow.manager.model.PreviewModel;
 import app.library.linkflow.manager.neckband.NeckbandManager;
 import app.library.linkflow.rtmp.RTSPToRTMPConverter;
@@ -157,7 +158,8 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
                     mRTMPUrl = intent.getStringExtra("rtmp_url");
                     mEnableBitrateAuto = intent.getBooleanExtra("rtmp_bitrate_auto", false);
                     if (mRTMPUrl != null) {
-                        if (mConverter.startRTMP(mRTMPUrl)) {
+                        RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
+                        if (mConverter.startRTMP(mRTMPUrl, recordSetItem.getWidth(), recordSetItem.getHeight(), recordSetItem.mFPS)) {
                             // backup original bitrate value and set temporary start bitrate to device
                             mSDM.setData(this, "bitrateStartTime", mNeckbandManager.getSetManage().getBitrate());
                             if (mEnableBitrateAuto) {
