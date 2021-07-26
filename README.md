@@ -59,3 +59,12 @@ https://github.com/ashqal/MD360Player4Android
 
 # Fixed - 04/05/21
 1. direct rtmp does not send video's resolution and frame rate, so some of rtmp server does not accept the stream. 
+
+# New feature - 07/26/21
+1. you can make single mode looks like cropped.
+ - select single mode
+ - select 1600x1600 sensor resolution
+ - select 16:9 resolution ( 1920x1080, 3840x2160 )
+2. direct rtmp does not support old firmware ( 1.8.0 or 2.2.0 ).
+3. media contents list api has json format problem so added new api.
+
