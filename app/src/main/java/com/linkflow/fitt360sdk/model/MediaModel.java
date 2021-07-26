@@ -39,11 +39,11 @@ public class MediaModel {
         mListener = listener;
     }
 
-    public void getMediaList(final String accessToken, int skip, int take) {
+    public void getMediaList(final String accessToken, boolean isOver252, int skip, int take) {
         if (!mIsWorking[0]) {
             mIsWorking[0] = true;
             Service service = NeckbandRestApiClient.getInstance().create(Service.class);
-            Call<JsonObject> callback = service.getMediaList(accessToken, take, skip);
+            Call<JsonObject> callback = isOver252 ? service.getMediaList2(accessToken, take, skip) : service.getMediaList(accessToken, take, skip);
             callback.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -61,8 +61,12 @@ public class MediaModel {
                             if (result.has("next")) {
                                 boolean hasNext = result.get("next").getAsBoolean();
                             }
-                            JsonParser parser = new JsonParser();
-                            JsonArray files = parser.parse(result.get("files").getAsString()).getAsJsonArray();
+                            JsonArray files;
+                            if (isOver252) {
+                                files = result.getAsJsonArray("files");
+                            } else {
+                                files = JsonParser.parseString(result.get("files").getAsString()).getAsJsonArray();
+                            }
                             for (JsonElement file : files) {
                                 String name = file.getAsString();
                                 items.add(new GalleryItem(name.contains(".mp4") ? GalleryRecyclerAdapter.VIEW_TYPE_VIDEO : GalleryRecyclerAdapter.VIEW_TYPE_PHOTO,
@@ -163,6 +167,9 @@ public class MediaModel {
     private interface Service {
         @GET("app/media/list/videophoto/{accessToken}/{take}/{skip}")
         Call<JsonObject> getMediaList(@Path("accessToken") String accessToken, @Path("take") int take, @Path("skip") int skip);
+
+        @GET("app/media/list2/videophoto/{accessToken}/{take}/{skip}")
+        Call<JsonObject> getMediaList2(@Path("accessToken") String accessToken, @Path("take") int take, @Path("skip") int skip);
 
         @POST("app/media/delete")
         Call<JsonObject> delete(@Body RequestBody body);

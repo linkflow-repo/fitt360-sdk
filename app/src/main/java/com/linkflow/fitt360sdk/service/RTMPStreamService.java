@@ -78,7 +78,8 @@ public class RTMPStreamService extends Service implements RTSPToRTMPConverter.Li
                 if(success) {
                     if(activated) {
                         Log.d(TAG, "completedControlRTSP success. startRTSPDecoder");
-                        mConverter.startRTSPDecoder(NeckbandRestApiClient.getRTSPUrl(), false);
+                        String version = mNeckbandManager.getInfoManage().getSoftwareItem().mVersion;
+                        mConverter.startRTSPDecoder(NeckbandRestApiClient.getRTSPUrl(), false, version);
                     } else
                         Log.d(TAG, "completedControlRTSP success. not activated");
                 } else {

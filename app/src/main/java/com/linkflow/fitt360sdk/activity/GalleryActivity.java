@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import app.library.linkflow.Constant;
 import app.library.linkflow.manager.helper.DownloadHelper;
 import app.library.linkflow.manager.helper.GPSXmlToGPSTxtHelper;
+import app.library.linkflow.manager.helper.Version;
 
 import com.linkflow.fitt360sdk.item.GalleryItem;
 import com.linkflow.fitt360sdk.model.MediaModel;
@@ -57,7 +58,8 @@ public class GalleryActivity extends BaseActivity implements GalleryRecyclerAdap
         if (mNeckbandManager != null) {
             if (mNeckbandManager.getConnectStateManage().isConnected()) {
                 if (mMediaModel != null) {
-                    mMediaModel.getMediaList(mNeckbandManager.getAccessToken(), 0, 5000);
+                    mMediaModel.getMediaList(mNeckbandManager.getAccessToken(),
+                            Version.isOver252(mNeckbandManager.getInfoManage().getFirmwareVersion()), 0, 5000);
                 }
             }
         }

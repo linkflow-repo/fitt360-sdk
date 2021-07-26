@@ -23,6 +23,7 @@ public class SettingRecordSelectActivity extends SettingBaseSelectActivity imple
     private static final String[] STITCHING_RESOLUTION = new String[] { "1440x720", "1280x720", "1920x1080", "2160x1080", "2880x1440", "3840x1920" };
     private static final String[] SINGLE_RESOLUTION = new String[] { "720x720", "1080x1080", "1440x1440", "2160x2160", "2400x2400" };
     private static final String[] SIDE_BY_SIDE_RESOLUTION = new String[] { "1440x480", "1920x640", "2160x720", "3240x1080", "3840x1280" };
+    private static final String[] SENSOR_RESOLUTION = new String[] { "1600x1600", "2160x2160", "2400x2400"};
     public static final int[] BITRATE = new int[] { 10, 20, 30 };
     public static final int[] BITRATE_TITLE = new int[] { R.string.bitrate_low, R.string.bitrate_middle, R.string.bitrate_high};
     private static final String[] FPS = new String[] { "30fps", "15fps" };
@@ -46,6 +47,7 @@ public class SettingRecordSelectActivity extends SettingBaseSelectActivity imple
     protected ArrayList<Item> initItems() {
         RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
         RecordExtendSetItem recordExtendSetItem = mNeckbandManager.getSetManage().getRecordExtendSetItem();
+        int[] sensorResolution = mNeckbandManager.getSetManage().getSensorResolution();
         switch (mSelectedIdPosition) {
             case 0: return makeItems(findPosition(recordSetItem.mViewMode, CAMERA_MODE), CAMERA_MODE);
             case 1: return makeResolutions(recordSetItem.getWidth() + "x" + recordSetItem.getHeight());
@@ -61,6 +63,7 @@ public class SettingRecordSelectActivity extends SettingBaseSelectActivity imple
             case 8:
                 float currentRate = mNeckbandManager.getSetManage().getTimeLapseRate();
                 return makeItems(findCorrectTimeLapseRate(currentRate, recordSetItem.mFPS), TIME_LAPSE_RATE_TITLE);
+            case 9: return makeItems(findPosition(sensorResolution[0] + "x" + sensorResolution[1], SENSOR_RESOLUTION), SENSOR_RESOLUTION);
         }
         return super.initItems();
     }
@@ -128,6 +131,11 @@ public class SettingRecordSelectActivity extends SettingBaseSelectActivity imple
                 case 8:
                     float rate = mSetManage.getRecordSetItem().mFPS / (float)TIME_LAPSE_RATE[position];
                     mNeckbandManager.getSetManage().getTimeLapseModel().setRate(mNeckbandManager.getAccessToken(), rate);
+                    break;
+                case 9:
+                    String[] sensorResolution = SENSOR_RESOLUTION[position].split("x");
+                    mSetManage.getCameraSettingModel().setSensorResolution(mNeckbandManager.getAccessToken(),
+                            Integer.parseInt(sensorResolution[0]), Integer.parseInt(sensorResolution[1]), null);
                     break;
             }
         }

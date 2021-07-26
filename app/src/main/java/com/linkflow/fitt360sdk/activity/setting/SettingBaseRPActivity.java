@@ -24,7 +24,7 @@ public abstract class SettingBaseRPActivity extends BaseActivity implements Sett
         ID_STITCHING_COLOR_BRIGHTNESS, ID_STITCHING_COLOR_CONTRAST, ID_STITCHING_COLOR_SATURATION,
         ID_STITCHING_FILTER_DUAL_SCALE_H, ID_STITCHING_FILTER_DUAL_SCALE_V, ID_STITCHING_FILTER_DUAL_OFFSET_H, ID_STITCHING_FILTER_DUAL_OFFSET_V,
         ID_STITCHING_REVOLUTION_ENABLED, ID_STITCHING_REVOLUTION_SPEED,
-        ID_STABILIZATION_CAL_RESET
+        ID_STABILIZATION_CAL_RESET, ID_SENSOR_RESOLUTION
     }
     protected final int[] CAMERA_POSITION = new int[] { R.string.camera_position_1, R.string.camera_position_3, R.string.camera_position_2 };
     protected RecyclerView mRecyclerView;

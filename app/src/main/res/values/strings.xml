@@ -127,6 +127,7 @@
     <string name="camera_position_2">CENTER</string>
     <string name="camera_position_3">RIGHT</string>
     <string name="resolution">Resolution</string>
+    <string name="sensor_resolution">Sensor Resolution</string>
     <string name="fps">Framerate</string>
     <string name="bitrate">Bitrate</string>
     <string name="bitrate_low">Low quality</string>

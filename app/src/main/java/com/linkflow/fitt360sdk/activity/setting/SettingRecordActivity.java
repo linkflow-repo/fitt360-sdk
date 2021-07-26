@@ -45,6 +45,8 @@ public class SettingRecordActivity extends SettingBaseRPActivity  {
             items.add(new TitleAndSubItem(ID.ID_CAMERA_POSITION, getString(R.string.camera_position),getString(CAMERA_POSITION[recordSetItem.mSingle - 1])));
         }
         items.add(new TitleAndSubItem(ID.ID_RESOLUTION, getString(R.string.resolution), recordSetItem.getWidth() + "x" + recordSetItem.getHeight()));
+        int[] sensorResolution = mNeckbandManager.getSetManage().getSensorResolution();
+        items.add(new TitleAndSubItem(ID.ID_SENSOR_RESOLUTION, getString(R.string.sensor_resolution), sensorResolution[0] + "x" + sensorResolution[1]));
         items.add(new TitleAndSubItem(ID.ID_FPS, getString(R.string.fps), recordSetItem.mFPS + " FPS"));
         items.add(new TitleAndSubItem(ID.ID_BITRATE, getString(R.string.bitrate), getString(findCorrectBitrateStatus(recordSetItem.mBitrate))));
         items.add(new TitleAndSubItem(ID.ID_CODEC, getString(R.string.codec), recordExtendSetItem.mCodec));
@@ -74,6 +76,7 @@ public class SettingRecordActivity extends SettingBaseRPActivity  {
             case ID_CAMERA_POSITION: selectedIdPosition = 6; break;
             case ID_TIME_LAPSE_STATE: selectedIdPosition = 7; break;
             case ID_TIME_LAPSE_RATE: selectedIdPosition = 8; break;
+            case ID_SENSOR_RESOLUTION: selectedIdPosition = 9; break;
         }
         if (selectedIdPosition != -1) {
             Intent intent = new Intent(this, SettingRecordSelectActivity.class);
