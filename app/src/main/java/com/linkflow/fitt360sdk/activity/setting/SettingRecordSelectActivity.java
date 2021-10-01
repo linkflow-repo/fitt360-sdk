@@ -21,7 +21,7 @@ import app.library.linkflow.manager.neckband.SettingListener;
 
 public class SettingRecordSelectActivity extends SettingBaseSelectActivity implements SettingListener {
     private static final String[] STITCHING_RESOLUTION = new String[] { "1440x720", "1280x720", "1920x1080", "2160x1080", "2880x1440", "3840x1920" };
-    private static final String[] SINGLE_RESOLUTION = new String[] { "720x720", "1080x1080", "1440x1440", "2160x2160", "2400x2400" };
+    private static final String[] SINGLE_RESOLUTION = new String[] { "720x720", "1080x1080", "1440x1440", "1920x1080", "2160x2160", "2400x2400", "3840x2160" };
     private static final String[] SIDE_BY_SIDE_RESOLUTION = new String[] { "1440x480", "1920x640", "2160x720", "3240x1080", "3840x1280" };
     private static final String[] SENSOR_RESOLUTION = new String[] { "1600x1600", "2160x2160", "2400x2400"};
     public static final int[] BITRATE = new int[] { 10, 20, 30 };
@@ -32,7 +32,7 @@ public class SettingRecordSelectActivity extends SettingBaseSelectActivity imple
     public static final String[] TIME_LAPSE_RATE_TITLE = new String[] { "2x", "4x", "8x", "16x", "32x" };
 
     private static final int[] TITLES = new int[] { R.string.camera_mode, R.string.resolution, R.string.fps, R.string.bitrate, R.string.codec, R.string.delay,
-            R.string.camera_position, R.string.setting_timelapse_state, R.string.setting_timelapse_rate };
+            R.string.camera_position, R.string.setting_timelapse_state, R.string.setting_timelapse_rate, R.string.sensor_resolution };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

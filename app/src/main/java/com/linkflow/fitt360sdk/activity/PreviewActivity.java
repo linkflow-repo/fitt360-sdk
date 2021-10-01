@@ -19,6 +19,7 @@ import com.android.mediacodec.VideoDecoder;
 import com.asha.vrlib.MDVRLibrary;
 import com.linkflow.fitt360sdk.R;
 
+import app.library.linkflow.Constant;
 import app.library.linkflow.manager.NeckbandRestApiClient;
 import app.library.linkflow.manager.item.RecordSetItem;
 import app.library.linkflow.manager.model.StitchingModel;
@@ -54,6 +55,8 @@ public class PreviewActivity extends BaseActivity {
 
         mStableBtn.setText(mIsStable ? R.string.stable_on : R.string.stable_off);
 
+        initRenderer();
+
         mNeckbandManager.getPreviewModel().activateRTSP(mNeckbandManager.getAccessToken(), !mNeckbandManager.isPreviewing());
         mRTSPChecker = new Handler(getMainLooper()) {
             @Override
@@ -66,8 +69,6 @@ public class PreviewActivity extends BaseActivity {
                 }
             }
         };
-
-        initRenderer();
     }
 
     @Override
@@ -84,6 +85,7 @@ public class PreviewActivity extends BaseActivity {
                     @Override
                     public void onSurfaceReady(Surface surface) {
                         Log.e("preview", "on surface ready");
+                        String version = mNeckbandManager.getInfoManage().getSoftwareItem().mVersion;
                         mRTSPChecker.removeMessages(MSG_NOT_START_RTSP);
                         mRTSPChecker.sendEmptyMessageDelayed(MSG_NOT_START_RTSP, 6000);
                         RecordSetItem recordSetItem = mNeckbandManager.getSetManage().getRecordSetItem();
@@ -115,7 +117,8 @@ public class PreviewActivity extends BaseActivity {
                             public void decodedAudio(byte[] audioData, int offset, int length) {
 
                             }
-                        }).setResolution(recordSetItem.getWidth(), recordSetItem.getHeight()).build();
+                        }).setIsOldFirmware(Constant.isOldFirmware(version)).setResolution(recordSetItem.getWidth(), recordSetItem.getHeight()).build();
+                        mRTSPStreamManager.setAudioDescriptor(getResources().openRawResourceFd(R.raw.aac_44k));
                         mRTSPStreamManager.setUrl(NeckbandRestApiClient.getRTSPUrl());
                         mRTSPStreamManager.setSurface(surface);
                         mRTSPStreamManager.start();
@@ -128,6 +131,9 @@ public class PreviewActivity extends BaseActivity {
                     }
                 })
                 .build(mGLSurfaceView);
+        if (mNeckbandManager.getSetManage().getRecordSetItem().mViewMode.equals("single")) {
+            mVRLibrary.switchProjectionMode(this, MDVRLibrary.PROJECTION_MODE_PLANE_FULL);
+        }
     }
 
     @Override
