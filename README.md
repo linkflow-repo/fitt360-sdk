@@ -68,3 +68,6 @@ https://github.com/ashqal/MD360Player4Android
 2. direct rtmp does not support old firmware ( 1.8.0 or 2.2.0 ).
 3. media contents list api has json format problem so added new api.
 
+# Fixed - 10/01/21
+1. app crashed during preview over android 11
+2. if record set sinlge, preview will show as panoram
